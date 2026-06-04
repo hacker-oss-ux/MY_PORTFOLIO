@@ -1,0 +1,1708 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AJAY GIRISH | AI Researcher & Builder</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --grey: #666666;
+            --line: #1a1a1a;
+            --accent: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- FILM GRAIN OVERLAY --- */
+        .noise {
+            position: fixed;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            z-index: 9998;
+            pointer-events: none;
+            opacity: 0.06;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' /%3E%3C/svg%3E");
+            animation: noise 0.4s steps(10) infinite;
+            will-change: transform;
+            backface-visibility: hidden;
+            transform: translate3d(0,0,0);
+        }
+
+        @keyframes noise {
+            0% { transform: translate3d(0,0,0); }
+            10% { transform: translate3d(-1%,-1%,0); }
+            20% { transform: translate3d(-2%,1%,0); }
+            30% { transform: translate3d(1%,-2%,0); }
+            40% { transform: translate3d(-1%,2%,0); }
+            50% { transform: translate3d(-2%,1%,0); }
+            60% { transform: translate3d(2%,0,0); }
+            70% { transform: translate3d(0,2%,0); }
+            80% { transform: translate3d(-2%,0,0); }
+            90% { transform: translate3d(1%,1%,0); }
+            100% { transform: translate3d(0,0,0); }
+        }
+
+        /* --- MILITARY VIEWFINDER --- */
+        #cursor-viewfinder {
+            position: fixed;
+            top: 0; left: 0;
+            width: 40px; height: 40px;
+            pointer-events: none;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s cubic-bezier(0.23, 1, 0.32, 1), 
+                        height 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .corner {
+            position: absolute;
+            width: 8px; height: 8px;
+            border-color: var(--white);
+            border-style: solid;
+            transition: all 0.3s ease;
+        }
+
+        .tl { top: 0; left: 0; border-width: 1px 0 0 1px; }
+        .tr { top: 0; right: 0; border-width: 1px 1px 0 0; }
+        .bl { bottom: 0; left: 0; border-width: 0 0 1px 1px; }
+        .br { bottom: 0; right: 0; border-width: 0 1px 1px 0; }
+
+        #cursor-label {
+            position: fixed;
+            pointer-events: none;
+            z-index: 10001;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            opacity: 0;
+            transform: translate(-50%, 30px);
+            transition: opacity 0.3s;
+        }
+
+        body.hover-active #cursor-viewfinder {
+            width: 60px; height: 60px;
+        }
+
+        body.hover-active .corner {
+            width: 12px; height: 12px;
+            border-color: var(--white);
+        }
+
+        body.hover-active #cursor-label {
+            opacity: 1;
+        }
+
+        html.lenis, html.lenis body {
+            height: auto;
+        }
+
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+
+        /* --- INTERACTIVE BACKGROUND --- */
+        #bg-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -2; /* Behind everything */
+            background: var(--black);
+            pointer-events: none;
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        body {
+            background-color: transparent; /* Show canvas */
+            color: var(--white);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 300;
+            cursor: none;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            cursor: none;
+        }
+
+        /* --- CUSTOM CURSOR --- */
+        #cursor-dot {
+            position: fixed;
+            top: 0; left: 0;
+            width: 8px; height: 8px;
+            background: var(--white);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            mix-blend-mode: difference;
+            transform: translate(-50%, -50%);
+        }
+
+        #cursor-label {
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 10000;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--black);
+            background: var(--white);
+            padding: 4px 8px;
+            border-radius: 2px;
+            white-space: nowrap;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.8);
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        body.hover-active #cursor-dot {
+            opacity: 0;
+        }
+
+        body.hover-active #cursor-label {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* --- PRELOADER --- */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background: var(--black);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        #preloader-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: var(--grey);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        #preloader-percent {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 400;
+        }
+
+        #preloader-bar-container {
+            width: 200px;
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #preloader-bar {
+            position: absolute;
+            top: 0; left: 0;
+            height: 100%;
+            width: 0%;
+            background: var(--white);
+            transition: width 0.1s linear;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            padding: 2rem 4vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            mix-blend-mode: difference;
+        }
+
+        .nav-logo {
+            font-size: 1.2rem;
+            font-weight: 500;
+            transition: letter-spacing 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s;
+        }
+
+        .nav-logo:hover {
+            letter-spacing: 0.2em;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--white);
+            position: relative;
+        }
+
+        /* --- HEADER / HERO --- */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 8rem 4vw 2rem 4vw;
+            position: relative;
+        }
+
+        .hero-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 4vh;
+        }
+
+        .hero-desc {
+            font-size: clamp(1.2rem, 2vw, 1.5rem);
+            line-height: 1.4;
+            max-width: 500px;
+            color: var(--grey);
+        }
+
+        .hero-desc span {
+            color: var(--white);
+        }
+
+        .hero-video-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40vw;
+            height: 25vw;
+            background: #111;
+            z-index: -1;
+            overflow: hidden;
+            opacity: 0; /* GSAP reveals this */
+        }
+        
+        .hero-video-placeholder::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .hero-svg-text {
+            width: 100%;
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: -2vw;
+        }
+
+        .hero-svg-text svg {
+            width: 100%;
+            height: auto;
+            fill: var(--white);
+            will-change: transform, filter, opacity;
+        }
+
+        /* --- AXIS LINES --- */
+        .axis-x, .axis-y {
+            position: fixed;
+            background: var(--line);
+            z-index: 99;
+            pointer-events: none;
+            opacity: 0.5;
+            will-change: transform;
+        }
+
+        .axis-x {
+            top: 0; left: 0;
+            width: 100%; height: 1px;
+            transform: translateY(50vh);
+        }
+
+        .axis-y {
+            top: 0; left: 0;
+            width: 1px; height: 100%;
+            transform: translateX(50vw);
+        }
+
+        /* --- WORKS (Layered HUD Style) --- */
+        .works-horizontal-section {
+            overflow: hidden;
+            background: #000;
+            position: relative;
+        }
+
+        .kinetic-marquee-bg {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100vw;
+            transform: translateY(-50%);
+            z-index: 0;
+            opacity: 0.03;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            white-space: nowrap;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 8vw;
+            font-weight: 500;
+            color: var(--white);
+            user-select: none;
+        }
+
+        .marquee-track {
+            display: inline-block;
+            animation: marquee 30s linear infinite;
+        }
+
+        .marquee-track.reverse {
+            animation: marquee-reverse 35s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        @keyframes marquee-reverse {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+        }
+
+        .works-wrapper {
+            width: 300%;
+            height: 100vh;
+            display: flex;
+            position: relative;
+            z-index: 1;
+        }
+        .work-card {
+            width: 100vw;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .work-visual-container {
+            width: 60vw;
+            height: 35vw;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: border-color 0.5s;
+        }
+
+        .work-card:hover .work-visual-container {
+            border-color: var(--white);
+        }
+
+        .work-visual-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* GSAP handles opacity, transform, filter, and clipPath now */
+        }
+
+        /* HUD ELEMENTS */
+        .hud-num {
+            position: absolute;
+            top: 10%; left: 5%;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 120px;
+            font-weight: 500;
+            color: var(--white);
+            opacity: 0.03;
+            pointer-events: none;
+        }
+
+        .hud-title-wrap {
+            position: absolute;
+            bottom: 10%; left: 5%;
+            z-index: 10;
+        }
+
+        .hud-title {
+            font-size: clamp(3rem, 6vw, 8rem);
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: -0.04em;
+            margin-bottom: 1rem;
+        }
+
+        .hud-category {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--grey);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+        }
+
+        .hud-details {
+            position: absolute;
+            top: 10%; right: 5%;
+            max-width: 300px;
+            text-align: right;
+            font-size: 0.9rem;
+            color: var(--grey);
+            line-height: 1.6;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* RGB GLITCH HOVER */
+        .work-card:hover .work-visual-container::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: inherit;
+            mix-blend-mode: screen;
+            box-shadow: 2px 0 red, -2px 0 blue;
+            opacity: 0.2;
+            animation: glitch-anim 0.2s infinite;
+        }
+
+        @keyframes glitch-anim {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        /* --- HOVER IMAGE REVEAL --- */
+        .hover-reveal {
+            position: fixed;
+            width: 400px;
+            height: 250px;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 150;
+            opacity: 0;
+            overflow: hidden;
+            transform: translate(-50%, -50%) scale(0.8);
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .hover-reveal__img {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transform: scale(1.2);
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .work-item:hover ~ .hover-reveal,
+        .work-item:hover .hover-reveal {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .work-item:hover .hover-reveal__img {
+            transform: scale(1);
+        }
+
+        @media(max-width: 768px) {
+            .work-item {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 3rem 0;
+            }
+            .work-category { text-align: left; }
+            .hover-reveal { display: none; }
+        }
+
+        /* --- DISCIPLINES (Sticky Stack) --- */
+        .disciplines-stack-section {
+            position: relative;
+            background: #000;
+            padding-bottom: 20vh; /* Space after cards finish stacking */
+        }
+
+        .disciplines-header {
+            padding: 10rem 4vw 2rem 4vw;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0));
+        }
+
+        .disciplines-container {
+            position: relative;
+            padding: 0 4vw;
+        }
+
+        .discipline-stack-card {
+            position: sticky;
+            top: 15vh; /* This is where the cards will stick */
+            height: 70vh;
+            width: 100%;
+            margin-bottom: 5vh;
+            background: #111111; /* Distinct dark gray to stand out against the #000 background */
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-top: 1px solid rgba(255, 255, 255, 0.4);
+            display: flex;
+            align-items: center;
+            transform-origin: top center;
+            overflow: hidden;
+            box-shadow: 0 -20px 40px rgba(0,0,0,1);
+            will-change: transform, opacity;
+        }
+
+        .card-inner {
+            padding: 4vw;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Interactive Hover Glow Layer */
+        .card-glow {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(
+                800px circle at var(--mouse-x, 50%) var(--mouse-y, -20%), 
+                rgba(255,255,255,0.06),
+                transparent 40%
+            );
+            z-index: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            opacity: 0.5;
+        }
+
+        .discipline-stack-card:hover .card-glow {
+            opacity: 1;
+        }
+
+        /* Cyber/Terminal Grid */
+        .card-grid-bg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position: center center;
+            opacity: 0.3;
+            z-index: 1;
+            pointer-events: none;
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
+            -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
+        }
+
+        /* Crosshairs */
+        .crosshair {
+            position: absolute;
+            width: 20px; height: 20px;
+            z-index: 2;
+        }
+        .crosshair::before, .crosshair::after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .crosshair::before { width: 100%; height: 1px; top: 50%; left: 0; }
+        .crosshair::after { width: 1px; height: 100%; left: 50%; top: 0; }
+
+        .crosshair.top-left { top: 2vw; left: 2vw; }
+        .crosshair.top-right { top: 2vw; right: 2vw; }
+        .crosshair.bottom-left { bottom: 2vw; left: 2vw; }
+        .crosshair.bottom-right { bottom: 2vw; right: 2vw; }
+
+        .discipline-stack-card:hover .crosshair::before,
+        .discipline-stack-card:hover .crosshair::after {
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 5px rgba(255,255,255,0.5);
+            transition: all 0.3s ease;
+        }
+
+        /* Metadata Header */
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 1rem;
+            margin-bottom: 3rem;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .disc-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: var(--white);
+            opacity: 0.4;
+            display: inline-block;
+        }
+
+        .disc-num::before {
+            content: 'DATA_NODE [';
+            opacity: 0.5;
+        }
+        .disc-num::after {
+            content: ']';
+            opacity: 0.5;
+        }
+
+        .disc-title {
+            font-size: clamp(3rem, 8vw, 8rem);
+            font-weight: 500;
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: -0.04em;
+            margin-bottom: 2rem;
+            color: var(--white);
+        }
+
+        .disc-info {
+            max-width: 600px;
+            font-size: clamp(1rem, 1.5vw, 1.25rem);
+            color: var(--grey);
+            line-height: 1.6;
+        }
+
+        /* --- FOOTER / CONTACT --- */
+        footer {
+            padding: 10rem 4vw 4vw 4vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 80vh;
+        }
+
+        .contact-cta {
+            font-size: clamp(3rem, 6vw, 5rem);
+            line-height: 1.1;
+            margin-bottom: 4rem;
+        }
+
+        .contact-cta a {
+            position: relative;
+            display: inline-block;
+        }
+
+        .contact-cta a::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 2px;
+            background: var(--white);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .contact-cta a:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--grey);
+            text-transform: uppercase;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .social-links a:hover {
+            color: var(--white);
+        }
+
+        /* --- ABOUT --- */
+        .section-padding {
+            padding: 10rem 4vw;
+        }
+
+        .section-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--grey);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+            display: block;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 6vw;
+            align-items: flex-start;
+        }
+
+        .profile-visual {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1 / 1.3;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            background: #0a0a0a;
+        }
+
+        #profile-webgl-container canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover;
+        }
+
+        .profile-id {
+            position: absolute;
+            bottom: 2rem; left: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--white);
+            z-index: 10;
+            background: var(--black);
+            padding: 4px 8px;
+            border: 1px solid var(--line);
+        }
+
+        .about-text {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            line-height: 1.2;
+            max-width: 1200px;
+            color: var(--white);
+            display: block;
+        }
+
+        .char {
+            opacity: 0.1; /* Dim when not "typed" */
+            transition: color 0.3s;
+        }
+
+        .char.active {
+            opacity: 1;
+            color: var(--white);
+        }
+
+        .terminal-cursor {
+            display: inline-block;
+            width: 0.6em;
+            height: 1em;
+            background: var(--white);
+            margin-left: 2px;
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+            position: relative;
+            z-index: 10;
+        }
+
+        @keyframes blink {
+            from, to { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        @media(max-width: 900px) {
+            .about-grid { grid-template-columns: 1fr; }
+            .profile-visual { aspect-ratio: 1/1; margin-bottom: 3rem; }
+        }
+
+        /* --- NAV TRANSITION SHUTTER --- */
+        #nav-shutter {
+            position: fixed;
+            inset: 0;
+            background: var(--black);
+            z-index: 10001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(100%);
+            flex-direction: column;
+        }
+
+        .shutter-line {
+            width: 100%;
+            height: 1px;
+            background: var(--white);
+            box-shadow: 0 0 20px var(--white);
+            position: absolute;
+            top: 0;
+        }
+
+        #shutter-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.5em;
+            color: var(--white);
+            text-transform: uppercase;
+            opacity: 0;
+        }
+
+        /* --- SYSTEM TELEMETRY HUD --- */
+        .system-telemetry {
+            position: fixed;
+            bottom: 2rem;
+            right: 4vw;
+            z-index: 100;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+            display: flex;
+            gap: 1rem;
+            pointer-events: none;
+            mix-blend-mode: difference;
+            letter-spacing: 0.1em;
+            transition: opacity 0.3s;
+        }
+
+        .tel-separator {
+            opacity: 0.3;
+        }
+
+        .tel-time {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* --- MEDIA QUERIES (Mobile Optimization) --- */
+        @media (max-width: 1024px) {
+            .hero-desc { font-size: 1.1rem; max-width: 100%; }
+            .hero-svg-text { margin-bottom: -4vw; }
+            .about-text { font-size: 2.5rem; }
+            
+            /* Adjust Works HUD for tablet/mobile */
+            .work-visual-container { width: 80vw; height: 50vw; }
+            .hud-title { font-size: 4rem; }
+            .hud-num { font-size: 80px; }
+            .hud-details { 
+                top: auto; 
+                bottom: 10%; 
+                right: 5%; 
+                text-align: right; 
+                max-width: 250px; 
+            }
+        }
+
+        @media (max-width: 768px) {
+            /* Navigation */
+            nav { padding: 1.5rem 5vw; }
+            .nav-links { gap: 1.5rem; }
+            .nav-links a { font-size: 10px; }
+
+            /* Hero */
+            header { padding: 6rem 5vw 2rem 5vw; }
+            .hero-svg-text { margin-bottom: -1vw; } /* Adjusted for mobile */
+
+            /* About */
+            .section-padding { padding: 6rem 5vw; }
+            .about-text { font-size: 2rem; }
+
+            /* Works (Horizontal to Vertical or Adjusted Horizontal) */
+            /* Keeping horizontal but adjusting proportions for mobile */
+            .work-visual-container { width: 90vw; height: 60vw; }
+            .hud-title { font-size: 3rem; }
+            .hud-num { font-size: 60px; top: 5%; }
+            .hud-details { 
+                bottom: 5%; 
+                font-size: 0.8rem; 
+                max-width: 200px; 
+            }
+
+            /* Disciplines Stack */
+            .discipline-stack-card { height: 80vh; }
+            .card-inner { padding: 8vw; }
+            .disc-title { font-size: 3.5rem; }
+            .disc-info { font-size: 1rem; }
+
+            /* Footer */
+            footer { padding: 6rem 5vw 3rem 5vw; min-height: 60vh; }
+            .contact-cta { font-size: 2.5rem; margin-bottom: 3rem; }
+            .footer-bottom { flex-direction: column; align-items: flex-start; gap: 2rem; }
+            .social-links { flex-wrap: wrap; gap: 1rem; }
+
+            /* Disable Custom Cursor on Touch */
+            @media (hover: none) and (pointer: coarse) {
+                #cursor-viewfinder, #cursor-label, #cursor-dot { display: none !important; }
+                body, a { cursor: auto !important; }
+            }
+        }
+
+        @media (max-width: 480px) {
+            /* Mobile tweaks */
+            .nav-links { display: none; } /* Consider a hamburger menu for very small screens if needed, or keep minimal */
+            .nav-logo { font-size: 1rem; }
+
+            /* If keeping nav links on small screens, stack them or make them tiny */
+            /* .nav-links { display: flex; gap: 0.8rem; } */
+            /* .nav-links a { font-size: 9px; } */
+
+            .hero-desc { font-size: 1rem; }
+            .about-text { font-size: 1.5rem; }
+            .hud-title { font-size: 2.5rem; }
+            .disc-title { font-size: 3rem; }
+
+            /* Hide telemetry on very small screens to avoid clutter */
+            .system-telemetry { display: none; }
+        }
+        /* Utility */
+        .reveal { opacity: 0; transform: translateY(40px); }
+    </style>
+</head>
+<body data-cursor="SYSTEM ACTIVE">
+
+    <!-- NAV SHUTTER -->
+    <div id="nav-shutter">
+        <div class="shutter-line"></div>
+        <div id="shutter-text">SYNCING DATA...</div>
+    </div>
+
+    <!-- BACKGROUND -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- AXIS LINES -->
+    <div class="axis-x"></div>
+    <div class="axis-y"></div>
+
+    <!-- NOISE -->
+    <div class="noise"></div>
+
+    <!-- CURSOR -->
+    <div id="cursor-viewfinder">
+        <div class="corner tl"></div>
+        <div class="corner tr"></div>
+        <div class="corner bl"></div>
+        <div class="corner br"></div>
+    </div>
+    <div id="cursor-label"></div>
+
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <div id="preloader-text">[ INITIALIZING VIEWPORT ]</div>
+        <div id="preloader-percent">0%</div>
+        <div id="preloader-bar-container">
+            <div id="preloader-bar"></div>
+        </div>
+    </div>
+
+    <!-- NAV -->
+    <nav>
+        <a href="#hero" class="nav-logo" data-cursor="HOME" data-target="#hero">AJAY GIRISH.</a>
+        <ul class="nav-links">
+            <li><a href="#about" class="scramble-link" data-text="ABOUT" data-cursor="GO" data-target="#about">ABOUT</a></li>
+            <li><a href="#works" class="scramble-link" data-text="WORKS" data-cursor="GO" data-target=".works-horizontal-section">WORKS</a></li>
+            <li><a href="#contact" class="scramble-link" data-text="CONTACT" data-cursor="GO" data-target="#contact">CONTACT</a></li>
+        </ul>
+    </nav>
+
+    <!-- HEADER / HERO -->
+    <header id="hero">
+        <div class="hero-top">
+            <p class="hero-desc reveal">
+                The personal portfolio of Ajay Girish, a developer based in Kerala exploring
+                <span>artificial intelligence</span>, <span>cybersecurity</span>, and <span>visual storytelling</span>.
+            </p>
+        </div>
+
+        <div class="hero-svg-text">
+            <svg viewBox="0 0 1800 200" preserveAspectRatio="xMidYMid meet">
+                <text x="50%" y="55%" text-anchor="middle" dominant-baseline="middle" font-size="180" font-weight="500" letter-spacing="-0.02em" class="scroll-scramble">AJAY GIRISH</text>
+            </svg>
+        </div>
+    </header>
+
+    <!-- ABOUT -->
+    <section id="about" class="section-padding">
+        <span class="section-tag reveal">( About )</span>
+        <h2 class="about-text terminal-type">
+            I build systems where software meets hardware. Focused on AI research, computer vision, and building digital environments that feel deliberate and exact.
+        </h2>
+    </section>
+
+    <!-- WORKS (Horizontal HUD Scroll) -->
+    <section class="works-horizontal-section">
+        <!-- Background Kinetic Marquee -->
+        <div class="kinetic-marquee-bg">
+            <div class="marquee-track">
+                <span>/// SYSTEM OVERRIDE /// ML MODEL ACTIVE /// ESP32 CONNECTED /// NEURAL CIPHER INITIATED /// SYSTEM OVERRIDE /// ML MODEL ACTIVE /// ESP32 CONNECTED /// NEURAL CIPHER INITIATED ///</span>
+            </div>
+            <div class="marquee-track reverse">
+                <span>/// THREAT INTEL ONLINE /// ANOMALY DETECTED /// VISUAL TRACKING ENGAGED /// SECURE CONNECTION ESTABLISHED /// THREAT INTEL ONLINE /// ANOMALY DETECTED /// VISUAL TRACKING ENGAGED ///</span>
+            </div>
+        </div>
+
+        <div class="works-wrapper">
+            
+            <!-- Project 1 -->
+            <div class="work-card" data-cursor="VIEW">
+                <span class="hud-num">01</span>
+                <div class="work-visual-container">
+                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070" alt="Gesture Gaming">
+                </div>
+                <div class="hud-title-wrap">
+                    <h3 class="hud-title">Gesture<br>Gaming</h3>
+                    <span class="hud-category">AI / Hardware / Python</span>
+                </div>
+                <p class="hud-details">
+                    // EXPERIMENT_001<br>
+                    // STATUS: COMPLETE<br>
+                    Hybrid interaction system using MediaPipe and ESP32 ultrasonic arrays.
+                </p>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="work-card" data-cursor="VIEW">
+                <span class="hud-num">02</span>
+                <div class="work-visual-container">
+                    <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=2070" alt="Threat Intel">
+                </div>
+                <div class="hud-title-wrap">
+                    <h3 class="hud-title">Threat<br>Intel</h3>
+                    <span class="hud-category">Cyber / ML / OSINT</span>
+                </div>
+                <p class="hud-details">
+                    // EXPERIMENT_002<br>
+                    // STATUS: ACTIVE<br>
+                    Automated reconnaissance framework utilizing ML-based anomaly detection.
+                </p>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="work-card" data-cursor="VIEW">
+                <span class="hud-num">03</span>
+                <div class="work-visual-container">
+                    <img src="https://images.unsplash.com/photo-1639322537228-f710d846310a?q=80&w=2070" alt="Neural Cipher">
+                </div>
+                <div class="hud-title-wrap">
+                    <h3 class="hud-title">Neural<br>Cipher</h3>
+                    <span class="hud-category">Crypto / Adversarial AI</span>
+                </div>
+                <p class="hud-details">
+                    // EXPERIMENT_003<br>
+                    // STATUS: RESEARCH<br>
+                    AI-assisted encryption schemes and adversarial robustness simulations.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- EXPERTISE / CAPABILITIES (Sticky Stacking Cards) -->
+    <section class="disciplines-stack-section">
+        <div class="disciplines-header">
+            <span class="section-tag reveal">( Capabilities )</span>
+        </div>
+        
+        <div class="disciplines-container">
+            <div class="discipline-stack-card" data-cursor="EXPLORE">
+                <div class="card-glow"></div>
+                <div class="card-grid-bg"></div>
+                <div class="crosshair top-left"></div>
+                <div class="crosshair top-right"></div>
+                <div class="crosshair bottom-left"></div>
+                <div class="crosshair bottom-right"></div>
+                <div class="card-inner">
+                    <div class="card-meta">
+                        <span class="disc-num">01</span>
+                    </div>
+                    <h2 class="disc-title">Machine<br>Learning</h2>
+                    <p class="disc-info">Researching neural architectures and generative models. Exploring how machines process semantic meaning and adapt to unsupervised environments.</p>
+                </div>
+            </div>
+
+            <div class="discipline-stack-card" data-cursor="EXPLORE">
+                <div class="card-glow"></div>
+                <div class="card-grid-bg"></div>
+                <div class="crosshair top-left"></div>
+                <div class="crosshair top-right"></div>
+                <div class="crosshair bottom-left"></div>
+                <div class="crosshair bottom-right"></div>
+                <div class="card-inner">
+                    <div class="card-meta">
+                        <span class="disc-num">02</span>
+                    </div>
+                    <h2 class="disc-title">Computer<br>Vision</h2>
+                    <p class="disc-info">Building real-time tracking systems and spatial awareness modules. Leveraging MediaPipe and OpenCV to create seamless human-machine interfaces.</p>
+                </div>
+            </div>
+
+            <div class="discipline-stack-card" data-cursor="EXPLORE">
+                <div class="card-glow"></div>
+                <div class="card-grid-bg"></div>
+                <div class="crosshair top-left"></div>
+                <div class="crosshair top-right"></div>
+                <div class="crosshair bottom-left"></div>
+                <div class="crosshair bottom-right"></div>
+                <div class="card-inner">
+                    <div class="card-meta">
+                        <span class="disc-num">03</span>
+                    </div>
+                    <h2 class="disc-title">Cyber<br>Security</h2>
+                    <p class="disc-info">Penetration testing and automated reconnaissance. Analyzing adversarial AI attacks and building proactive defense systems.</p>
+                </div>
+            </div>
+
+            <div class="discipline-stack-card" data-cursor="EXPLORE">
+                <div class="card-glow"></div>
+                <div class="card-grid-bg"></div>
+                <div class="crosshair top-left"></div>
+                <div class="crosshair top-right"></div>
+                <div class="crosshair bottom-left"></div>
+                <div class="crosshair bottom-right"></div>
+                <div class="card-inner">
+                    <div class="card-meta">
+                        <span class="disc-num">04</span>
+                    </div>
+                    <h2 class="disc-title">Hardware<br>& IoT</h2>
+                    <p class="disc-info">Designing embedded systems where code meets physical reality. Developing low-latency communication between ESP32 arrays and software.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- FOOTER -->
+    <footer id="contact">
+        <div>
+            <span class="section-tag reveal">( Contact )</span>
+            <h2 class="contact-cta reveal">
+                Got a project?<br>
+                <a href="mailto:ajaygirish@gmail.com" data-cursor="SEND MAIL">Let's build it.</a>
+            </h2>
+        </div>
+
+        <div class="footer-bottom reveal">
+            <div class="location">
+                BASED IN KERALA, INDIA<br>
+                ┬⌐ 2026 AJAY GIRISH
+            </div>
+            <div class="social-links">
+                <a href="https://github.com/Cigarfeine" target="_blank" rel="noreferrer noopener" class="scramble-link" data-text="GITHUB">GITHUB</a>
+                <a href="https://www.linkedin.com/in/ajaygirish?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noreferrer noopener" class="scramble-link" data-text="LINKEDIN">LINKEDIN</a>
+                <a href="https://www.instagram.com/sisyphar" target="_blank" rel="noreferrer noopener" class="scramble-link" data-text="INSTAGRAM">INSTAGRAM</a>
+                <a href="https://wa.me/917736889417" target="_blank" rel="noreferrer noopener" class="scramble-link" data-text="WHATSAPP">WHATSAPP</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SYSTEM TELEMETRY HUD -->
+    <div id="telemetry-hud" class="system-telemetry">
+        <span class="tel-label">SYS_LOC [10.8505┬░ N, 76.2711┬░ E] KERALA</span>
+        <span class="tel-separator">//</span>
+        <span class="tel-time" id="tel-clock">00:00:00</span>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+    
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // 1. PRELOADER
+        let progress = 0;
+        const percentEl = document.getElementById('preloader-percent');
+        const preloader = document.getElementById('preloader');
+        const barEl = document.getElementById('preloader-bar');
+        const textEl = document.getElementById('preloader-text');
+        
+        const loadingTexts = [
+            "[ COMPILING SCENE ]",
+            "[ DECRYPTING ASSETS ]",
+            "[ MOUNTING 3D_TERRAIN ]",
+            "[ ESTABLISHING SECURE CONNECTION ]"
+        ];
+
+        let loaderInterval = setInterval(() => {
+            progress += Math.floor(Math.random() * 5) + 2;
+            
+            // Randomly flash technical phrases
+            if(progress % 15 === 0 && progress < 90) {
+                textEl.textContent = loadingTexts[Math.floor(Math.random() * loadingTexts.length)];
+            }
+
+            if(progress >= 100) {
+                progress = 100;
+                textEl.textContent = "[ SYSTEM READY ]";
+                clearInterval(loaderInterval);
+                finishLoading();
+            }
+            
+            percentEl.textContent = progress + '%';
+            if (barEl) barEl.style.width = progress + '%';
+        }, 30);
+
+        function finishLoading() {
+            // Trigger the animations slightly *before* the preloader fully vanishes
+            initAnimations();
+            
+            gsap.to(preloader, {
+                yPercent: -100,
+                duration: 1.2, // Slightly slower slide up to match the slow text reveal
+                ease: "power4.inOut"
+            });
+        }
+
+        // 2. SMOOTH SCROLL (Lenis)
+        const lenis = new Lenis({
+            duration: 1.8, // Heavier feel
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 0.8, // Slower, more controlled
+        });
+
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+        gsap.ticker.lagSmoothing(0);
+
+        // 3. MILITARY VIEWFINDER & AXIS
+        const viewfinder = document.getElementById('cursor-viewfinder');
+        const label = document.getElementById('cursor-label');
+        const axisX = document.querySelector('.axis-x');
+        const axisY = document.querySelector('.axis-y');
+        
+        let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+        let vX = mouseX, vY = mouseY;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            // Move Axis Lines (Hardware Accelerated)
+            gsap.to(axisX, { y: mouseY, duration: 0.1 });
+            gsap.to(axisY, { x: mouseX, duration: 0.1 });
+        });
+
+        // Smooth follow
+        gsap.ticker.add(() => {
+            vX += (mouseX - vX) * 0.15;
+            vY += (mouseY - vY) * 0.15;
+            gsap.set(viewfinder, { x: vX, y: vY });
+            gsap.set(label, { x: vX, y: vY });
+        });
+
+        // Hover Logic
+        document.querySelectorAll('[data-cursor], .service-row').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                document.body.classList.add('hover-active');
+                label.textContent = el.getAttribute('data-cursor') || 'VIEW';
+            });
+            el.addEventListener('mouseleave', () => {
+                document.body.classList.remove('hover-active');
+            });
+        });
+
+        // Magnetic Nav Logic
+        document.querySelectorAll('.nav-links a, .nav-logo').forEach(el => {
+            el.addEventListener('mousemove', (e) => {
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                gsap.to(el, { x: x * 0.4, y: y * 0.4, duration: 0.3 });
+                // Pull viewfinder towards element
+                mouseX = rect.left + rect.width / 2;
+                mouseY = rect.top + rect.height / 2;
+            });
+            el.addEventListener('mouseleave', () => {
+                gsap.to(el, { x: 0, y: 0, duration: 0.3 });
+            });
+        });
+
+        // 4. SCRAMBLE TEXT ENGINE (Advanced)
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}[]|:;<>,.?/~';
+        
+        function scrambleText(el, time = 1000) {
+            const originalText = el.textContent;
+            let iterations = 0;
+            const interval = setInterval(() => {
+                el.textContent = originalText.split('').map((char, index) => {
+                    if (index < iterations) return originalText[index];
+                    return chars[Math.floor(Math.random() * chars.length)];
+                }).join('');
+                if (iterations >= originalText.length) clearInterval(interval);
+                iterations += originalText.length / (time / 30);
+            }, 30);
+        }
+
+        document.querySelectorAll('.scramble-link').forEach(link => {
+            link.addEventListener('mouseenter', () => scrambleText(link, 400));
+        });
+
+        // Logo Minimal Effect: Scramble the actual name
+        const navLogo = document.querySelector('.nav-logo');
+        navLogo.addEventListener('mouseenter', () => scrambleText(navLogo, 600));
+
+        // 6. 3D WIREFRAME TERRAIN BACKGROUND (Three.js)
+        const canvas = document.getElementById('bg-canvas');
+        
+        // Scene setup
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x000000, 0.0015); // Add depth to the darkness
+
+        // Camera setup
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 5, 20); // Elevated looking down slightly
+        camera.lookAt(0, 0, 0);
+
+        // Renderer setup
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Performance optimization
+
+        // Terrain Geometry (A large plane with many segments)
+        const geometry = new THREE.PlaneGeometry(100, 100, 40, 40);
+        
+        // Rotate flat so it looks like a floor
+        geometry.rotateX(-Math.PI / 2);
+
+        // Displace the vertices to create terrain
+        const vertices = geometry.attributes.position.array;
+        for (let i = 0; i < vertices.length; i += 3) {
+            const x = vertices[i];
+            const z = vertices[i + 2];
+            // Simple math formula for rolling hills/waves
+            vertices[i + 1] = Math.sin(x / 5) * 2 + Math.cos(z / 4) * 2;
+        }
+        
+        // Must update normals for lighting (though wireframe doesn't strictly need it, good practice)
+        geometry.computeVertexNormals();
+
+        // Wireframe Material
+        const material = new THREE.MeshBasicMaterial({ 
+            color: 0x333333, // Dark grey cyber-industrial color
+            wireframe: true,
+            transparent: true,
+            opacity: 0.2 // Very subtle
+        });
+
+        const terrain = new THREE.Mesh(geometry, material);
+        scene.add(terrain);
+
+        // Animation Loop
+        let clock = new THREE.Clock();
+        
+        function animateBackground() {
+            requestAnimationFrame(animateBackground);
+            
+            const time = clock.getElapsedTime();
+
+            // Slowly animate the terrain moving towards the camera
+            const positions = terrain.geometry.attributes.position.array;
+            for (let i = 0; i < positions.length; i += 3) {
+                const x = positions[i];
+                const z = positions[i + 2];
+                // Update the Y axis (height) over time to make it ripple
+                positions[i + 1] = Math.sin(x / 5 + time * 0.5) * 2 + Math.cos(z / 4 + time * 0.3) * 2;
+            }
+            terrain.geometry.attributes.position.needsUpdate = true;
+
+            // Subtle mouse parallax effect
+            const targetX = (mouseX / window.innerWidth - 0.5) * 4;
+            const targetY = (mouseY / window.innerHeight - 0.5) * 4;
+            
+            camera.position.x += (targetX - camera.position.x) * 0.05;
+            // Keep Y elevated but allow slight shifting
+            camera.position.y += ((5 - targetY) - camera.position.y) * 0.05;
+            camera.lookAt(0, 0, 0);
+
+            renderer.render(scene, camera);
+        }
+
+        // Handle Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Start animation
+        animateBackground();
+
+        // 4. SCROLL-SYNC TYPEWRITER ENGINE
+        function initScrollTypewriter() {
+            const el = document.querySelector('.terminal-type');
+            if(!el) return;
+
+            const text = el.textContent.trim();
+            el.innerHTML = ''; // Clear original
+            
+            // 1. Split into characters
+            const chars = text.split('').map(char => {
+                const span = document.createElement('span');
+                span.textContent = char;
+                span.className = 'char';
+                el.appendChild(span);
+                return span;
+            });
+
+            // 2. Add dynamic cursor
+            const cursor = document.createElement('span');
+            cursor.className = 'terminal-cursor';
+            el.appendChild(cursor);
+
+            // 3. Scroll Animation
+            gsap.to(chars, {
+                opacity: 1,
+                stagger: 0.1,
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top 80%",
+                    end: "bottom 40%",
+                    scrub: 0.5, // Follow scroll
+                    onUpdate: (self) => {
+                        // Position cursor at the end of visible text
+                        const activeChars = chars.filter(c => gsap.getProperty(c, "opacity") > 0.5);
+                        if(activeChars.length > 0) {
+                            const lastChar = activeChars[activeChars.length - 1];
+                            // Subtle cursor follow could be complex with wrapping, 
+                            // for now let's just ensure it blinks at the end.
+                        }
+                    }
+                }
+            });
+        }
+
+        // 9. NAV SHUTTER ENGINE
+        function initNavShutter() {
+            const shutter = document.getElementById('nav-shutter');
+            const shutterText = document.getElementById('shutter-text');
+            const navItems = document.querySelectorAll('nav a');
+
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = item.getAttribute('data-target');
+                    const targetEl = document.querySelector(targetId);
+                    if(!targetEl) return;
+
+                    // 1. Close Shutter
+                    const tl = gsap.timeline();
+                    tl.to(shutter, { yPercent: -100, duration: 0.6, ease: "power4.inOut" })
+                      .to(shutterText, { opacity: 1, duration: 0.2 }, "-=0.2")
+                      .call(() => {
+                          // 2. Jump to section while covered
+                          lenis.scrollTo(targetEl, { immediate: true });
+                      })
+                      .to(shutterText, { opacity: 0, duration: 0.2, delay: 0.3 })
+                      // 3. Open Shutter (Slide down)
+                      .to(shutter, { yPercent: 0, duration: 0.6, ease: "power4.inOut" });
+                });
+            });
+        }
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            initScrollTypewriter();
+            initNavShutter();
+            initCardGlow();
+            initTelemetry();
+        });
+
+        // 4.6 Live System Telemetry
+        function initTelemetry() {
+            const clockEl = document.getElementById('tel-clock');
+            if (!clockEl) return;
+            
+            function updateTime() {
+                const now = new Date();
+                const hrs = String(now.getHours()).padStart(2, '0');
+                const mins = String(now.getMinutes()).padStart(2, '0');
+                const secs = String(now.getSeconds()).padStart(2, '0');
+                clockEl.textContent = `T_MINUS: ${hrs}:${mins}:${secs}`;
+            }
+            
+            updateTime();
+            setInterval(updateTime, 1000);
+        }
+
+        // 4.5 Interactive Card Glow
+        function initCardGlow() {
+            const cards = document.querySelectorAll('.discipline-stack-card');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                });
+            });
+        }
+
+        // 5. SCROLL REVEALS
+        function initAnimations() {
+            // Horizontal Scroll for Works (HUD Style)
+            const worksWrapper = document.querySelector('.works-wrapper');
+            const workCards = document.querySelectorAll('.work-card');
+
+            const worksTween = gsap.to(worksWrapper, {
+                xPercent: -66.66,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: ".works-horizontal-section",
+                    pin: true,
+                    scrub: 1,
+                    snap: 1 / 2,
+                    end: () => "+=" + worksWrapper.offsetWidth,
+                    onUpdate: (self) => {
+                        // Lens Skew Animation based on velocity
+                        const skew = self.getVelocity() / 300;
+                        gsap.to('.work-visual-container img', { skewX: skew, duration: 0.5, ease: "power2.out" });
+                    }
+                }
+            });
+
+            // Cinematic Reveal & Parallax for each card
+            workCards.forEach(card => {
+                const num = card.querySelector('.hud-num');
+                const details = card.querySelector('.hud-details');
+                const img = card.querySelector('img');
+
+                // Parallax on text
+                gsap.to(num, { x: -100, scrollTrigger: { trigger: card, containerAnimation: worksTween, scrub: true } });
+                gsap.to(details, { x: 50, scrollTrigger: { trigger: card, containerAnimation: worksTween, scrub: true } });
+
+                // Snap, Scale, and Colorize when entering center (Dhero/Mason Wong style)
+                gsap.fromTo(img, 
+                    { 
+                        filter: "grayscale(100%) brightness(0.5)",
+                        scale: 1.2,
+                        clipPath: "inset(0 100% 0 0)" // Scanner reveal start
+                    },
+                    { 
+                        filter: "grayscale(0%) brightness(1)",
+                        scale: 1,
+                        clipPath: "inset(0 0% 0 0)", // Scanner reveal end
+                        ease: "power2.out",
+                        scrollTrigger: {
+                            trigger: card,
+                            containerAnimation: worksTween,
+                            start: "left center", // Trigger when left of card hits center
+                            end: "center center", // Finish when card is perfectly centered
+                            scrub: true,
+                        }
+                    }
+                );
+            });
+            // Clean Stacking Cards for Disciplines
+            const stackCards = gsap.utils.toArray('.discipline-stack-card');
+            
+            stackCards.forEach((card, i) => {
+                if (i < stackCards.length - 1) {
+                    // Just slightly push back to create a shadow/depth effect
+                    // REMOVED OPACITY DROP: Card remains fully solid so it can't be seen through.
+                    gsap.to(card, {
+                        scale: 1 - ((stackCards.length - 1 - i) * 0.02), // subtle scaling based on depth
+                        y: "-3vh", // Slight push up
+                        ease: "none", 
+                        scrollTrigger: {
+                            trigger: stackCards[i + 1],
+                            start: "top bottom",
+                            end: "top 15%", 
+                            scrub: true,
+                        }
+                    });
+                }
+            });
+
+            // Initial Hero reveal
+            const tl = gsap.timeline({ delay: 0.3 }); // Wait until preloader is almost gone
+
+            // 1. Cinematic Entrance for the Main Name (SVG)
+            const heroName = document.querySelector('.hero-svg-text svg');
+            tl.fromTo(heroName, 
+                { 
+                    scale: 1.5, 
+                    filter: "blur(20px)", 
+                    opacity: 0,
+                    y: 100 
+                },
+                {
+                    scale: 1,
+                    filter: "blur(0px)",
+                    opacity: 1,
+                    y: 0,
+                    duration: 2,
+                    ease: "expo.out"
+                }
+            );
+
+            // 2. Reveal the small text/desc overlapping with the name
+            tl.to('.reveal', {
+                y: 0,
+                opacity: 1,
+                duration: 1,
+                stagger: 0.1,
+                ease: "power3.out"
+            }, "-=1.5"); // Starts 0.5s after the name animation begins
+
+            // Scroll trigger scramble (keep for when user scrolls back up)
+            document.querySelectorAll('.scroll-scramble').forEach(el => {
+                ScrollTrigger.create({
+                    trigger: el,
+                    start: "top 85%",
+                    onEnter: () => scrambleText(el, 800)
+                });
+            });
+
+            // Reveal other elements
+            gsap.utils.toArray('.reveal').forEach(elem => {
+                ScrollTrigger.create({
+                    trigger: elem,
+                    start: "top 85%",
+                    onEnter: () => {
+                        gsap.to(elem, {
+                            y: 0,
+                            opacity: 1,
+                            duration: 1.2,
+                            ease: "power3.out"
+                        });
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>
+
