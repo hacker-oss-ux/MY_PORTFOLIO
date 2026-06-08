@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -291,10 +291,29 @@
             line-height: 1.4;
             max-width: 500px;
             color: var(--grey);
+            transition: color 0.4s ease;
         }
 
-        .hero-desc span {
+        .hero-desc:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .hero-desc span:not(.char) {
             color: var(--white);
+            transition: text-shadow 0.4s ease;
+        }
+
+        .hero-desc:hover span:not(.char) {
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+
+        .hero-desc .char {
+            transition: color 0.15s ease, text-shadow 0.15s ease;
+        }
+
+        .hero-desc .char:hover {
+            color: var(--white) !important;
+            text-shadow: 0 0 12px rgba(255, 255, 255, 0.9) !important;
         }
 
         .hero-video-placeholder {
@@ -984,6 +1003,191 @@
             /* Hide telemetry on very small screens to avoid clutter */
             .system-telemetry { display: none; }
         }
+        /* --- GITHUB SECTION --- */
+        .github-section {
+            background: #000;
+            border-top: 1px solid var(--line);
+        }
+        .github-header {
+            margin-bottom: 4rem;
+        }
+        .github-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            color: var(--white);
+            letter-spacing: -0.02em;
+        }
+        .github-repos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .repo-card {
+            background: #0d0d0d;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            position: relative;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .repo-card:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-5px);
+        }
+        .repo-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .repo-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem;
+            color: var(--white);
+            text-transform: uppercase;
+        }
+        .repo-link-icon {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+        .repo-desc {
+            font-size: 0.9rem;
+            color: var(--grey);
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+        .repo-meta {
+            display: flex;
+            gap: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .repo-lang {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .repo-lang-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--white);
+        }
+        .repo-loader {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: var(--grey);
+            padding: 2rem;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* --- GUESTBOOK SECTION --- */
+        .guestbook-section {
+            background: #000;
+            border-top: 1px solid var(--line);
+        }
+        .guestbook-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            color: var(--white);
+            letter-spacing: -0.02em;
+            margin-bottom: 3rem;
+        }
+        .guestbook-box {
+            background: #0d0d0d;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .guestbook-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+            padding-bottom: 2.5rem;
+        }
+        .guestbook-input-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: #050505;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0.8rem 1.2rem;
+        }
+        .guestbook-prompt {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.3);
+            white-space: nowrap;
+        }
+        .gb-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--white);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+        }
+        .gb-input::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+        }
+        .gb-submit-btn {
+            align-self: flex-end;
+            background: var(--white);
+            color: var(--black);
+            border: none;
+            padding: 0.8rem 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .gb-submit-btn:hover {
+            background: transparent;
+            color: var(--white);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+        }
+        .guestbook-log {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+        .guestbook-log::-webkit-scrollbar {
+            width: 4px;
+        }
+        .guestbook-log::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .gb-entry {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        .gb-entry-meta {
+            font-size: 11px;
+            color: var(--grey);
+        }
+        .gb-entry-text {
+            word-break: break-word;
+        }
         /* Utility */
         .reveal { opacity: 0; transform: translateY(40px); }
     </style>
@@ -1037,9 +1241,8 @@
     <!-- HEADER / HERO -->
     <header id="hero">
         <div class="hero-top">
-            <p class="hero-desc reveal">
-                The personal portfolio of Arshad, a developer based in Kerala exploring
-                <span>artificial intelligence</span>, <span>cybersecurity</span>, and <span>visual storytelling</span>.
+            <p class="hero-desc reveal terminal-type">
+                <span>Hi, I'm Ajay Girish,</span> a passionate developer from Kerala who loves building <span>innovative, user-focused web solutions</span> and turning ideas into <span>impactful digital experiences.</span>
             </p>
         </div>
 
@@ -1054,7 +1257,7 @@
     <section id="about" class="section-padding">
         <span class="section-tag reveal">( About )</span>
         <h2 class="about-text terminal-type">
-            I build systems where software meets hardware. Focused on AI research, computer vision, and building digital environments that feel deliberate and exact.
+            Hi, I'm Ajay, a BCA student and aspiring IT specialist with a strong interest in web development, software engineering, and modern technologies. I enjoy building practical projects that solve real-world problems while continuously expanding my technical skills. My journey in technology is driven by curiosity, creativity, and a passion for learning. I have experience working with HTML, CSS, JavaScript, and other development tools, and I am constantly exploring new technologies to improve my expertise. Through academic projects, internships, and self-learning, I aim to develop innovative solutions and grow into a skilled IT professional. I believe in continuous improvement, teamwork, and turning ideas into impactful digital experiences. When I'm not coding, I spend time learning about emerging technologies, improving my problem-solving abilities, and working on projects that challenge me to think creatively.
         </h2>
     </section>
 
@@ -1144,8 +1347,8 @@
                     <div class="card-meta">
                         <span class="disc-num">01</span>
                     </div>
-                    <h2 class="disc-title">Machine<br>Learning</h2>
-                    <p class="disc-info">Researching neural architectures and generative models. Exploring how machines process semantic meaning and adapt to unsupervised environments.</p>
+                    <h2 class="disc-title">Full Stack<br>Development</h2>
+                    <p class="disc-info">Building scalable web applications and interactive digital experiences. Focused on creating efficient, responsive, and user-centered solutions using modern technologies.</p>
                 </div>
             </div>
 
@@ -1160,8 +1363,8 @@
                     <div class="card-meta">
                         <span class="disc-num">02</span>
                     </div>
-                    <h2 class="disc-title">Computer<br>Vision</h2>
-                    <p class="disc-info">Building real-time tracking systems and spatial awareness modules. Leveraging MediaPipe and OpenCV to create seamless human-machine interfaces.</p>
+                    <h2 class="disc-title">Aspiring IT<br>Specialist</h2>
+                    <p class="disc-info">Passionate about software development, problem-solving, and emerging technologies. Continuously learning and building projects that transform ideas into practical solutions.</p>
                 </div>
             </div>
 
@@ -1176,8 +1379,8 @@
                     <div class="card-meta">
                         <span class="disc-num">03</span>
                     </div>
-                    <h2 class="disc-title">Cyber<br>Security</h2>
-                    <p class="disc-info">Penetration testing and automated reconnaissance. Analyzing adversarial AI attacks and building proactive defense systems.</p>
+                    <h2 class="disc-title">Artificial<br>Intelligence</h2>
+                    <p class="disc-info">Exploring intelligent systems, automation, and data-driven solutions. Learning how modern AI technologies can enhance real-world applications and experiences.</p>
                 </div>
             </div>
 
@@ -1192,32 +1395,85 @@
                     <div class="card-meta">
                         <span class="disc-num">04</span>
                     </div>
-                    <h2 class="disc-title">Hardware<br>& IoT</h2>
-                    <p class="disc-info">Designing embedded systems where code meets physical reality. Developing low-latency communication between ESP32 arrays and software.</p>
+                    <h2 class="disc-title">Infinite<br>Possibilities</h2>
+                    <p class="disc-info">Pushing the limits of technology through innovation, creativity, and lifelong learning.</p>
+                </div>
+            </div>
+
+            <div class="discipline-stack-card" data-cursor="EXPLORE">
+                <div class="card-glow"></div>
+                <div class="card-grid-bg"></div>
+                <div class="crosshair top-left"></div>
+                <div class="crosshair top-right"></div>
+                <div class="crosshair bottom-left"></div>
+                <div class="crosshair bottom-right"></div>
+                <div class="card-inner">
+                    <div class="card-meta">
+                        <span class="disc-num">05</span>
+                    </div>
+                    <h2 class="disc-title">Beyond the<br>Interface</h2>
+                    <p class="disc-info">Building experiences that go beyond screens and interactions. Combining technology, creativity, and innovation to create meaningful digital solutions that leave a lasting impact.</p>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- GITHUB REPOSITORIES SECTION -->
+    <section id="github" class="section-padding github-section">
+        <div class="github-header">
+            <span class="section-tag reveal">( Dynamic Feed )</span>
+            <h2 class="github-title reveal scroll-scramble">ACTIVE_CODE_BASES</h2>
+        </div>
+        <div class="github-repos-grid reveal" id="github-repos">
+            <!-- Dynamically populated via JS -->
+            <div class="repo-loader">// ACCESSING GITHUB API...</div>
+        </div>
+    </section>
+
+    <!-- GUESTBOOK SECTION -->
+    <section id="guestbook" class="section-padding guestbook-section">
+        <div class="guestbook-header">
+            <span class="section-tag reveal">( Network Testimonials )</span>
+            <h2 class="guestbook-title reveal scroll-scramble">VISITOR_GUESTBOOK</h2>
+        </div>
+        <div class="guestbook-box reveal">
+            <form id="guestbook-form" class="guestbook-form">
+                <div class="guestbook-input-group">
+                    <span class="guestbook-prompt">visitor@port:~#</span>
+                    <input type="text" id="gb-name" placeholder="name" required class="gb-input">
+                </div>
+                <div class="guestbook-input-group">
+                    <span class="guestbook-prompt">msg@port:~#</span>
+                    <input type="text" id="gb-msg" placeholder="leave a message..." required class="gb-input">
+                </div>
+                <button type="submit" class="gb-submit-btn" data-cursor="SEND">// TRANSMIT</button>
+            </form>
+            <div class="guestbook-log" id="guestbook-log">
+                <!-- Dynamically populated via JS -->
+            </div>
+        </div>
+    </section>
+
     <!-- FOOTER -->
     <footer id="contact">
         <div>
             <span class="section-tag reveal">( Contact )</span>
             <h2 class="contact-cta reveal">
-                Got a project?<br>
-                <a href="mailto:arshadrafi566@gmail.com" data-cursor="SEND MAIL">Let's build it.</a>
+                HAVE A VISION?<br>
+                <a href="mailto:ajaygirish@gmail.com" data-cursor="SEND MAIL">Let's transform it into reality.</a>
             </h2>
         </div>
 
         <div class="footer-bottom reveal">
             <div class="location">
                 BASED IN KERALA, INDIA<br>
-                ┬⌐ 2026 ARSHAD
+                © 2026 ARSHAD
             </div>
             <div class="social-links">
-                <a href="https://github.com/Cigarfeine" target="_blank" rel="noreferrer noopener" class="scramble-link" data-text="GITHUB">GITHUB</a>
-                <a href="https://www.linkedin.com/in/arshad-rafi-204458351?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noreferrer noopener" class="scramble-link" data-text="LINKEDIN">LINKEDIN</a>
-                <a href="https://www.instagram.com/sisyphar" target="_blank" rel="noreferrer noopener" class="scramble-link" data-text="INSTAGRAM">INSTAGRAM</a>
-                <a href="https://wa.me/917736889417" target="_blank" rel="noreferrer noopener" class="scramble-link" data-text="WHATSAPP">WHATSAPP</a>
+                <a href="https://github.com/hacker-oss-ux" target="_blank" rel="noreferrer noopener" class="scramble-link" data-text="GITHUB">GITHUB</a>
+                <a href="https://www.linkedin.com/in/ajay-girish-2a4496379/" target="_blank" rel="noreferrer noopener" class="scramble-link" data-text="LINKEDIN">LINKEDIN</a>
+                <a href="https://www.instagram.com/mr__cluche_r/" target="_blank" rel="noreferrer noopener" class="scramble-link" data-text="INSTAGRAM">INSTAGRAM</a>
+                <a href="https://api.whatsapp.com/send/?phone=916238550283&text&type=phone_number&app_absent=0" target="_blank" rel="noreferrer noopener" class="scramble-link" data-text="WHATSAPP">WHATSAPP</a>
             </div>
         </div>
     </footer>
@@ -1225,6 +1481,10 @@
     <!-- SYSTEM TELEMETRY HUD -->
     <div id="telemetry-hud" class="system-telemetry">
         <span class="tel-label">SYS_LOC [10.8505┬░ N, 76.2711┬░ E] KERALA</span>
+        <span class="tel-separator">//</span>
+        <span class="tel-label" id="tel-ip">IP: DETECTING...</span>
+        <span class="tel-separator">//</span>
+        <span class="tel-label" id="tel-date">YYYY-MM-DD</span>
         <span class="tel-separator">//</span>
         <span class="tel-time" id="tel-clock">00:00:00</span>
     </div>
@@ -1461,45 +1721,37 @@
 
         // 4. SCROLL-SYNC TYPEWRITER ENGINE
         function initScrollTypewriter() {
-            const el = document.querySelector('.terminal-type');
-            if(!el) return;
-
-            const text = el.textContent.trim();
-            el.innerHTML = ''; // Clear original
-            
-            // 1. Split into characters
-            const chars = text.split('').map(char => {
-                const span = document.createElement('span');
-                span.textContent = char;
-                span.className = 'char';
-                el.appendChild(span);
-                return span;
-            });
-
-            // 2. Add dynamic cursor
-            const cursor = document.createElement('span');
-            cursor.className = 'terminal-cursor';
-            el.appendChild(cursor);
-
-            // 3. Scroll Animation
-            gsap.to(chars, {
-                opacity: 1,
-                stagger: 0.1,
-                scrollTrigger: {
-                    trigger: el,
-                    start: "top 80%",
-                    end: "bottom 40%",
-                    scrub: 0.5, // Follow scroll
-                    onUpdate: (self) => {
-                        // Position cursor at the end of visible text
-                        const activeChars = chars.filter(c => gsap.getProperty(c, "opacity") > 0.5);
-                        if(activeChars.length > 0) {
-                            const lastChar = activeChars[activeChars.length - 1];
-                            // Subtle cursor follow could be complex with wrapping, 
-                            // for now let's just ensure it blinks at the end.
+            const els = document.querySelectorAll('.terminal-type');
+            els.forEach(el => {
+                el.innerHTML = el.innerHTML.replace(/\s+/g, ' ').trim();
+                const chars = [];
+                function processNode(node) {
+                    if (node.nodeType === 3) {
+                        const fragment = document.createDocumentFragment();
+                        for (let char of node.textContent) {
+                            const span = document.createElement('span');
+                            span.textContent = char;
+                            span.className = 'char';
+                            fragment.appendChild(span);
+                            chars.push(span);
                         }
+                        node.parentNode.replaceChild(fragment, node);
+                    } else if (node.nodeType === 1) {
+                        Array.from(node.childNodes).forEach(child => processNode(child));
                     }
                 }
+                Array.from(el.childNodes).forEach(child => processNode(child));
+
+                gsap.to(chars, {
+                    opacity: 1,
+                    stagger: 0.1,
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 80%",
+                        end: "bottom 40%",
+                        scrub: 0.5
+                    }
+                });
             });
         }
 
@@ -1537,23 +1789,335 @@
             initNavShutter();
             initCardGlow();
             initTelemetry();
+            initGithubRepos();
+            initGuestbook();
         });
 
         // 4.6 Live System Telemetry
         function initTelemetry() {
+            // Load Vercel Analytics dynamically to avoid Vite build warnings
+            const analyticsScript = document.createElement('script');
+            analyticsScript.defer = true;
+            analyticsScript.src = '/_vercel/insights/script.js';
+            document.head.appendChild(analyticsScript);
+
             const clockEl = document.getElementById('tel-clock');
+            const dateEl = document.getElementById('tel-date');
+            const ipEl = document.getElementById('tel-ip');
             if (!clockEl) return;
             
+            if (ipEl) {
+                fetch('https://api.ipify.org?format=json')
+                    .then(r => r.json())
+                    .then(data => { ipEl.textContent = `IP: ${data.ip}`; })
+                    .catch(() => { ipEl.textContent = `IP: UNKNOWN`; });
+            }
+
             function updateTime() {
                 const now = new Date();
                 const hrs = String(now.getHours()).padStart(2, '0');
                 const mins = String(now.getMinutes()).padStart(2, '0');
                 const secs = String(now.getSeconds()).padStart(2, '0');
                 clockEl.textContent = `T_MINUS: ${hrs}:${mins}:${secs}`;
+                
+                if (dateEl) {
+                    const year = now.getFullYear();
+                    const month = String(now.getMonth() + 1).padStart(2, '0');
+                    const day = String(now.getDate()).padStart(2, '0');
+                    dateEl.textContent = `DATE: ${year}-${month}-${day}`;
+                }
             }
             
             updateTime();
             setInterval(updateTime, 1000);
+        }
+
+        // 4.7 Dynamic GitHub Feed
+        function initGithubRepos() {
+            const container = document.getElementById('github-repos');
+            if (!container) return;
+
+            const username = 'hacker-oss-ux';
+            const cacheKey = `github_repos_${username}`;
+            const cacheTimeKey = `github_repos_time_${username}`;
+            const cacheDuration = 30 * 60 * 1000; // 30 minutes
+
+            const localData = localStorage.getItem(cacheKey);
+            const localTime = localStorage.getItem(cacheTimeKey);
+            const now = Date.now();
+
+            if (localData && localTime && (now - localTime < cacheDuration)) {
+                renderRepos(JSON.parse(localData));
+                return;
+            }
+
+            fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`)
+                .then(res => {
+                    if (!res.ok) throw new Error('Failed to fetch repositories');
+                    return res.json();
+                })
+                .then(repos => {
+                    // Filter fork and select active ones
+                    const filtered = repos.filter(r => !r.fork).slice(0, 6);
+                    localStorage.setItem(cacheKey, JSON.stringify(filtered));
+                    localStorage.setItem(cacheTimeKey, now.toString());
+                    renderRepos(filtered);
+                })
+                .catch(err => {
+                    console.error('Error fetching repos:', err);
+                    renderMockRepos();
+                });
+
+            function renderRepos(repos) {
+                if (!repos || repos.length === 0) {
+                    renderMockRepos();
+                    return;
+                }
+                container.innerHTML = '';
+                repos.forEach(repo => {
+                    const desc = repo.description || 'No description provided for this repository.';
+                    const lang = repo.language || 'Code';
+                    const stars = repo.stargazers_count || 0;
+                    
+                    const card = document.createElement('div');
+                    card.className = 'repo-card';
+                    card.setAttribute('data-cursor', 'OPEN');
+                    card.innerHTML = `
+                        <div class="repo-top">
+                            <h3 class="repo-name">${repo.name}</h3>
+                            <a href="${repo.html_url}" target="_blank" rel="noreferrer noopener" class="repo-link-icon">
+                                ➔
+                            </a>
+                        </div>
+                        <p class="repo-desc">${desc}</p>
+                        <div class="repo-meta">
+                            <span class="repo-lang">
+                                <span class="repo-lang-dot" style="background: ${getLangColor(lang)}"></span>
+                                ${lang}
+                            </span>
+                            <span class="repo-stars">★ ${stars}</span>
+                        </div>
+                    `;
+                    // Redirect on click
+                    card.addEventListener('click', () => {
+                        window.open(repo.html_url, '_blank', 'noreferrer noopener');
+                    });
+                    
+                    // Bind custom cursor events
+                    card.addEventListener('mouseenter', () => {
+                        document.body.classList.add('hover-active');
+                        const label = document.getElementById('cursor-label');
+                        if (label) label.textContent = 'OPEN';
+                    });
+                    card.addEventListener('mouseleave', () => {
+                        document.body.classList.remove('hover-active');
+                    });
+
+                    container.appendChild(card);
+                });
+            }
+
+            function renderMockRepos() {
+                const mock = [
+                    { name: 'Gesture-Gaming', html_url: '#', description: 'Hybrid interaction system using MediaPipe and ESP32 ultrasonic arrays.', language: 'Python', stargazers_count: 12 },
+                    { name: 'Threat-Intel', html_url: '#', description: 'Automated reconnaissance framework utilizing ML-based anomaly detection.', language: 'Python', stargazers_count: 8 },
+                    { name: 'Neural-Cipher', html_url: '#', description: 'AI-assisted encryption schemes and adversarial robustness simulations.', language: 'JavaScript', stargazers_count: 15 }
+                ];
+                renderRepos(mock);
+            }
+
+            function getLangColor(lang) {
+                const colors = {
+                    'JavaScript': '#f1e05a',
+                    'Python': '#3572A5',
+                    'HTML': '#e34c26',
+                    'CSS': '#563d7c',
+                    'TypeScript': '#3178c6',
+                    'C++': '#f34b7d'
+                };
+                return colors[lang] || '#8b8b8b';
+            }
+        }
+
+        // 4.8 Live Visitor Guestbook
+        function initGuestbook() {
+            const form = document.getElementById('guestbook-form');
+            const logContainer = document.getElementById('guestbook-log');
+            if (!form || !logContainer) return;
+
+            const dbUrl = 'https://kvdb.io/AXRcHrwo2Ghqsy56FnpSQX/entries';
+            let entries = [];
+
+            // Display loading indicator initially
+            logContainer.innerHTML = '<div class="gb-entry-meta">// RETRIEVING LIVE LOGS...</div>';
+
+            function renderEntries() {
+                logContainer.innerHTML = '';
+                if (entries.length === 0) {
+                    logContainer.innerHTML = '<div class="gb-entry-meta">// NO ACTIVE TRANSMISSIONS FOUND</div>';
+                    return;
+                }
+                
+                // Cap and render only the latest 3 entries
+                const visibleEntries = entries.slice(-3);
+                [...visibleEntries].reverse().forEach(entry => {
+                    const locStr = entry.location ? ` // LOC: ${entry.location}` : '';
+                    const div = document.createElement('div');
+                    div.className = 'gb-entry';
+                    div.innerHTML = `
+                        <div class="gb-entry-meta">[${entry.date}] // USER: ${escapeHtml(entry.name)}${escapeHtml(locStr)}</div>
+                        <div class="gb-entry-text">&gt; ${escapeHtml(entry.msg)}</div>
+                    `;
+                    logContainer.appendChild(div);
+                });
+            }
+
+            // Fetch live entries from server on load
+            fetch(dbUrl)
+                .then(res => {
+                    if (res.status === 404) {
+                        return [];
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    entries = Array.isArray(data) ? data : [];
+                    // Ensure entries don't contain any mock/sample records from older tests
+                    entries = entries.filter(e => e.name !== "Muhammed Arshad" && e.name !== "Elena Rostova" && e.name !== "Test Visitor" && e.name !== "Verify Bot");
+                    renderEntries();
+                })
+                .catch(err => {
+                    console.error('Failed to load guestbook from server:', err);
+                    logContainer.innerHTML = '<div class="gb-entry-meta" style="color: #ff3333;">// ERROR ACCESSING SERVER LOGS</div>';
+                });
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const nameEl = document.getElementById('gb-name');
+                const msgEl = document.getElementById('gb-msg');
+                const submitBtn = form.querySelector('.gb-submit-btn');
+                if (!nameEl || !msgEl) return;
+
+                const name = nameEl.value.trim();
+                const msg = msgEl.value.trim();
+                if (!name || !msg) return;
+
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = '// TRANSMITTING...';
+                }
+
+                // Fetch approximate client location using a secure, free geolocation service
+                fetch('https://ipapi.co/json/')
+                    .then(res => res.json())
+                    .then(locData => {
+                        const city = locData.city || '';
+                        const region = locData.region || '';
+                        const country = locData.country_name || '';
+                        let locString = 'UNKNOWN';
+                        if (city && region) {
+                            locString = `${city}, ${region}, ${country}`;
+                        } else if (region) {
+                            locString = `${region}, ${country}`;
+                        } else if (country) {
+                            locString = country;
+                        }
+                        processSubmission(name, msg, locString);
+                    })
+                    .catch(() => {
+                        processSubmission(name, msg, 'UNKNOWN');
+                    });
+
+                function processSubmission(name, msg, location) {
+                    const now = new Date();
+                    const year = now.getFullYear();
+                    const month = String(now.getMonth() + 1).padStart(2, '0');
+                    const day = String(now.getDate()).padStart(2, '0');
+                    const hrs = String(now.getHours()).padStart(2, '0');
+                    const mins = String(now.getMinutes()).padStart(2, '0');
+                    const dateStr = `${year}-${month}-${day} ${hrs}:${mins}`;
+
+                    const newEntry = { name, msg, date: dateStr, location: location };
+
+                    // Fetch latest entries from server to merge and keep list consistent
+                    fetch(dbUrl)
+                        .then(res => {
+                            if (res.status === 404) return [];
+                            return res.json();
+                        })
+                        .then(currentEntries => {
+                            let updatedEntries = Array.isArray(currentEntries) ? currentEntries : [];
+                            // Filter out any mock entries just in case
+                            updatedEntries = updatedEntries.filter(e => e.name !== "Muhammed Arshad" && e.name !== "Elena Rostova" && e.name !== "Test Visitor" && e.name !== "Verify Bot");
+                            
+                            updatedEntries.push(newEntry);
+                            
+                            // Keep only the last 3 entries
+                            if (updatedEntries.length > 3) {
+                                updatedEntries = updatedEntries.slice(-3);
+                            }
+                            
+                            entries = updatedEntries;
+
+                            // Save to server
+                            return fetch(dbUrl, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(updatedEntries)
+                            });
+                        })
+                        .then(() => {
+                            // Send email notification to user via Web3Forms
+                            const payload = {
+                                access_key: 'a0edfce7-3147-4da4-8bf9-50a323de5382', // Verified Web3Forms key routed to ajaygirish025@gmail.com
+                                subject: `New Guestbook Submission from ${name}`,
+                                from_name: 'Portfolio Guestbook Log',
+                                name: name,
+                                message: msg,
+                                date: dateStr,
+                                location: location
+                            };
+
+                            return fetch('https://api.web3forms.com/submit', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify(payload)
+                            });
+                        })
+                        .then(() => {
+                            if (submitBtn) {
+                                submitBtn.disabled = false;
+                                submitBtn.textContent = '// TRANSMIT';
+                            }
+                            nameEl.value = '';
+                            msgEl.value = '';
+                            renderEntries();
+                        })
+                        .catch(err => {
+                            console.error('Failed to submit entry:', err);
+                            if (submitBtn) {
+                                submitBtn.disabled = false;
+                                submitBtn.textContent = '// TRANSMIT';
+                            }
+                            nameEl.value = '';
+                            msgEl.value = '';
+                            renderEntries();
+                        });
+                }
+            });
+
+            function escapeHtml(str) {
+                return str.replace(/&/g, "&amp;")
+                          .replace(/</g, "&lt;")
+                          .replace(/>/g, "&gt;")
+                          .replace(/"/g, "&quot;")
+                          .replace(/'/g, "&#039;");
+            }
         }
 
         // 4.5 Interactive Card Glow
