@@ -1,0 +1,17 @@
+{
+  "name": "ajaygirish-portfolio",
+  "version": "1.0.0",
+  "description": "Personal portfolio of Ajay Girish",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.2.0"
+  },
+  "dependencies": {
+    "@vercel/speed-insights": "^2.0.0"
+  }
+}
