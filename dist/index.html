@@ -5,6 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AJAY GIRISH | AI Researcher & Builder</title>
+    <link rel="icon" type="image/png" href="/assets/ajay_favicon-DlnA80kg.png" />
+    <link rel="apple-touch-icon" href="/assets/ajay_favicon-DlnA80kg.png" />
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -923,6 +925,52 @@
             color: rgba(255, 255, 255, 0.8);
         }
 
+        /* --- VISITOR COUNTER BAR --- */
+        #visitor-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.85);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 2vw;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            color: rgba(255, 255, 255, 0.5);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        #visitor-bar .vbar-count {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            margin: 0 6px;
+            letter-spacing: 0.08em;
+        }
+
+        #visitor-bar .vbar-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #4fffb0;
+            margin-right: 8px;
+            animation: vbar-pulse 1.8s ease-in-out infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes vbar-pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.7); }
+        }
+
         /* --- MEDIA QUERIES (Mobile Optimization) --- */
         @media (max-width: 1024px) {
             .hero-desc { font-size: 1.1rem; max-width: 100%; }
@@ -1191,6 +1239,7 @@
         /* Utility */
         .reveal { opacity: 0; transform: translateY(40px); }
     </style>
+  <script type="module" crossorigin src="/assets/index-DP8K-cKG.js"></script>
 </head>
 <body data-cursor="SYSTEM ACTIVE">
 
@@ -1443,6 +1492,10 @@
                     <input type="text" id="gb-name" placeholder="name" required class="gb-input">
                 </div>
                 <div class="guestbook-input-group">
+                    <span class="guestbook-prompt">mail@port:~#</span>
+                    <input type="email" id="gb-email" placeholder="your email address" required class="gb-input">
+                </div>
+                <div class="guestbook-input-group">
                     <span class="guestbook-prompt">msg@port:~#</span>
                     <input type="text" id="gb-msg" placeholder="leave a message..." required class="gb-input">
                 </div>
@@ -1477,6 +1530,12 @@
             </div>
         </div>
     </footer>
+
+    <!-- VISITOR COUNTER BAR -->
+    <div id="visitor-bar">
+        <span class="vbar-dot"></span>
+        TOTAL VISITORS: <span class="vbar-count" id="visitor-count">LOADING...</span>
+    </div>
 
     <!-- SYSTEM TELEMETRY HUD -->
     <div id="telemetry-hud" class="system-telemetry">
@@ -1994,13 +2053,15 @@
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const nameEl = document.getElementById('gb-name');
+                const emailEl = document.getElementById('gb-email');
                 const msgEl = document.getElementById('gb-msg');
                 const submitBtn = form.querySelector('.gb-submit-btn');
-                if (!nameEl || !msgEl) return;
+                if (!nameEl || !emailEl || !msgEl) return;
 
                 const name = nameEl.value.trim();
+                const email = emailEl.value.trim();
                 const msg = msgEl.value.trim();
-                if (!name || !msg) return;
+                if (!name || !email || !msg) return;
 
                 if (submitBtn) {
                     submitBtn.disabled = true;
@@ -2022,13 +2083,13 @@
                         } else if (country) {
                             locString = country;
                         }
-                        processSubmission(name, msg, locString);
+                        processSubmission(name, email, msg, locString);
                     })
                     .catch(() => {
-                        processSubmission(name, msg, 'UNKNOWN');
+                        processSubmission(name, email, msg, 'UNKNOWN');
                     });
 
-                function processSubmission(name, msg, location) {
+                function processSubmission(name, email, msg, location) {
                     const now = new Date();
                     const year = now.getFullYear();
                     const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -2037,7 +2098,7 @@
                     const mins = String(now.getMinutes()).padStart(2, '0');
                     const dateStr = `${year}-${month}-${day} ${hrs}:${mins}`;
 
-                    const newEntry = { name, msg, date: dateStr, location: location };
+                    const newEntry = { name, email, msg, date: dateStr, location: location };
 
                     // Fetch latest entries from server to merge and keep list consistent
                     fetch(dbUrl)
@@ -2071,9 +2132,10 @@
                         .then(() => {
                             // Send email notification to user via Web3Forms
                             const payload = {
-                                access_key: '6b6d2740-4286-4e58-bb18-2e0618ffec7b', // Public free form submission key routed to ajaygirish025@gmail.com
+                                access_key: 'a0edfce7-3147-4da4-8bf9-50a323de5382', // Verified Web3Forms key routed to ajaygirish025@gmail.com
                                 subject: `New Guestbook Submission from ${name}`,
                                 from_name: 'Portfolio Guestbook Log',
+                                email: email,
                                 name: name,
                                 message: msg,
                                 date: dateStr,
@@ -2095,6 +2157,7 @@
                                 submitBtn.textContent = '// TRANSMIT';
                             }
                             nameEl.value = '';
+                            emailEl.value = '';
                             msgEl.value = '';
                             renderEntries();
                         })
@@ -2266,7 +2329,104 @@
                 });
             });
         }
+
+        // =============================================
+        // VISITOR COUNTER — Real-time via KVdb.io
+        // Increments once on load, then polls every 5s
+        // =============================================
+        (function initVisitorCounter() {
+            const BUCKET      = '5sWydtXfDJta83W9P8mJrx';
+            const KEY         = 'total_visitors';
+            const BASE_URL    = `https://kvdb.io/${BUCKET}/${KEY}`;
+            const countEl     = document.getElementById('visitor-count');
+            const POLL_MS     = 5000;  // poll every 5 seconds
+            let   lastCount   = 0;
+            let   hasIncremented = false;
+
+            function formatNumber(n) {
+                return Number(n).toLocaleString('en-IN');
+            }
+
+            // Animate count rolling up when it changes
+            function animateCount(from, to) {
+                if (!countEl) return;
+                if (from === to) { countEl.textContent = formatNumber(to); return; }
+                const steps    = 20;
+                const stepTime = 40; // ms
+                let   current  = from;
+                const inc      = (to - from) / steps;
+                let   step     = 0;
+                const timer = setInterval(() => {
+                    step++;
+                    current += inc;
+                    countEl.textContent = formatNumber(Math.round(current));
+                    if (step >= steps) {
+                        clearInterval(timer);
+                        countEl.textContent = formatNumber(to);
+                    }
+                }, stepTime);
+            }
+
+            // On first load: fetch → increment → display
+            function incrementOnLoad() {
+                fetch(BASE_URL)
+                    .then(r => r.text())
+                    .then(text => {
+                        const current = parseInt(text, 10) || 0;
+                        const next    = current + 1;
+                        lastCount     = next;
+                        // Save incremented count
+                        return fetch(BASE_URL, {
+                            method : 'POST',
+                            headers: { 'Content-Type': 'text/plain' },
+                            body   : String(next)
+                        }).then(() => next);
+                    })
+                    .then(next => {
+                        animateCount(0, next);
+                        hasIncremented = true;
+                    })
+                    .catch(() => {
+                        // Fallback: just show current count
+                        fetch(BASE_URL)
+                            .then(r => r.text())
+                            .then(text => {
+                                const n = parseInt(text, 10) || 0;
+                                lastCount = n;
+                                animateCount(0, n);
+                                hasIncremented = true;
+                            })
+                            .catch(() => {
+                                if (countEl) countEl.textContent = '—';
+                                hasIncremented = true;
+                            });
+                    });
+            }
+
+            // Poll for live updates every 5 seconds
+            function startPolling() {
+                setInterval(() => {
+                    fetch(BASE_URL)
+                        .then(r => r.text())
+                        .then(text => {
+                            const current = parseInt(text, 10) || 0;
+                            if (current !== lastCount && hasIncremented) {
+                                animateCount(lastCount, current);
+                                lastCount = current;
+                            }
+                        })
+                        .catch(() => { /* silent fail */ });
+                }, POLL_MS);
+            }
+
+            // Start
+            incrementOnLoad();
+            startPolling();
+        })();
+
     </script>
+    <!-- Speed Insights -->
+    <!-- Analytics -->
 </body>
 </html>
 
