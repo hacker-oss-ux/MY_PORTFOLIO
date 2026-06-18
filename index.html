@@ -426,6 +426,11 @@
             0% { transform: translateX(-50%); }
             100% { transform: translateX(0); }
         }
+        @media (max-width: 768px) {
+            .kinetic-marquee-bg {
+                display: none;
+            }
+        }
 
         .works-wrapper {
             width: 300%;
@@ -1611,18 +1616,21 @@
         }
 
         // 2. SMOOTH SCROLL (Lenis)
-        const lenis = new Lenis({
-            duration: 1.8, // Heavier feel
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            direction: 'vertical',
-            gestureDirection: 'vertical',
-            smooth: true,
-            mouseMultiplier: 0.8, // Slower, more controlled
-        });
+        let lenis;
+        if (window.innerWidth > 768) {
+            lenis = new Lenis({
+                duration: 1.8, // Heavier feel
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                direction: 'vertical',
+                gestureDirection: 'vertical',
+                smooth: true,
+                mouseMultiplier: 0.8, // Slower, more controlled
+            });
 
-        lenis.on('scroll', ScrollTrigger.update);
-        gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-        gsap.ticker.lagSmoothing(0);
+            lenis.on('scroll', ScrollTrigger.update);
+            gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+            gsap.ticker.lagSmoothing(0);
+        }
 
         if (window.innerWidth > 768) {
         // 3. MILITARY VIEWFINDER & AXIS
@@ -1845,7 +1853,11 @@
                       .to(shutterText, { opacity: 1, duration: 0.2 }, "-=0.2")
                       .call(() => {
                           // 2. Jump to section while covered
-                          lenis.scrollTo(targetEl, { immediate: true });
+                          if (typeof lenis !== 'undefined') {
+                              lenis.scrollTo(targetEl, { immediate: true });
+                          } else {
+                              targetEl.scrollIntoView();
+                          }
                       })
                       .to(shutterText, { opacity: 0, duration: 0.2, delay: 0.3 })
                       // 3. Open Shutter (Slide down)
@@ -2243,14 +2255,17 @@
                 gsap.to(details, { x: 50, scrollTrigger: { trigger: card, containerAnimation: worksTween, scrub: true } });
 
                 // Snap, Scale, and Colorize when entering center (Dhero/Mason Wong style)
+                const isMobile = window.innerWidth <= 768;
                 gsap.fromTo(img, 
                     { 
-                        filter: "grayscale(100%) brightness(0.5)",
+                        filter: isMobile ? "none" : "grayscale(100%) brightness(0.5)",
+                        opacity: isMobile ? 0.3 : 1,
                         scale: 1.2,
                         clipPath: "inset(0 100% 0 0)" // Scanner reveal start
                     },
                     { 
-                        filter: "grayscale(0%) brightness(1)",
+                        filter: isMobile ? "none" : "grayscale(0%) brightness(1)",
+                        opacity: 1,
                         scale: 1,
                         clipPath: "inset(0 0% 0 0)", // Scanner reveal end
                         ease: "power2.out",
