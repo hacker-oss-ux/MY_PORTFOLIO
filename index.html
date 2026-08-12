@@ -1253,6 +1253,369 @@
             min-width: 80px;
             display: inline-block;
         }
+
+        /* --- TECH STACK MATRIX SECTION --- */
+        .tech-stack-section {
+            background: #000;
+            border-top: 1px solid var(--line);
+            position: relative;
+            z-index: 2;
+        }
+
+        .tech-stack-header {
+            margin-bottom: 3rem;
+        }
+
+        .tech-stack-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            color: var(--white);
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-filter-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 3rem;
+        }
+
+        .tech-filter-btn {
+            background: #0d0d0d;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--grey);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            padding: 0.6rem 1.2rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 2px;
+        }
+
+        .tech-filter-btn:hover,
+        .tech-filter-btn.active {
+            background: var(--white);
+            color: var(--black);
+            border-color: var(--white);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .tech-matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.8rem;
+        }
+
+        .skill-card {
+            background: #0d0d0d;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.8rem;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 3px; height: 100%;
+            background: transparent;
+            transition: background 0.3s;
+        }
+
+        .skill-card:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 255, 255, 0.05);
+        }
+
+        .skill-card:hover::before {
+            background: var(--white);
+        }
+
+        .skill-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .skill-category-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--grey);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .skill-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            padding: 3px 6px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+        }
+
+        .skill-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: var(--white);
+            margin-bottom: 0.6rem;
+        }
+
+        .skill-desc {
+            font-size: 0.88rem;
+            color: var(--grey);
+            line-height: 1.5;
+            margin-bottom: 1.2rem;
+        }
+
+        .skill-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+            border-top: 1px dashed rgba(255, 255, 255, 0.1);
+            padding-top: 0.8rem;
+        }
+
+        .skill-proj-link {
+            color: var(--white);
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .skill-proj-link:hover {
+            color: #4fffb0;
+        }
+
+        /* --- INTERACTIVE PROJECT MODAL --- */
+        #project-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 10005;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2vw;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        #project-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .modal-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            max-height: 85vh;
+            background: #0a0a0a;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9), 0 0 30px rgba(255, 255, 255, 0.1);
+            z-index: 2;
+            overflow-y: auto;
+            transform: scale(0.95) translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 3rem;
+        }
+
+        #project-modal.active .modal-container {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 1.5rem; right: 1.5rem;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--white);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            padding: 6px 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .modal-close-btn:hover {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .modal-header {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 1.5rem;
+        }
+
+        .modal-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--grey);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .modal-title {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 500;
+            line-height: 1.1;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+
+        .modal-body {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .modal-media {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #111;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .modal-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-section-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--white);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-section-title::before {
+            content: '';
+            display: inline-block;
+            width: 6px; height: 6px;
+            background: #4fffb0;
+        }
+
+        .modal-text {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-highlights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin-bottom: 2rem;
+        }
+
+        .modal-highlights-list li {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.85);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .modal-highlights-list li::before {
+            content: '>>';
+            color: var(--grey);
+        }
+
+        .modal-tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .modal-tech-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--white);
+            padding: 4px 10px;
+            border-radius: 2px;
+        }
+
+        .modal-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border-top: 1px dashed rgba(255, 255, 255, 0.15);
+            padding-top: 2rem;
+        }
+
+        .modal-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--white);
+            color: var(--black);
+            padding: 0.8rem 1.8rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            border: 1px solid var(--white);
+        }
+
+        .modal-action-btn:hover {
+            background: transparent;
+            color: var(--white);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-action-btn.secondary {
+            background: transparent;
+            color: var(--white);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-action-btn.secondary:hover {
+            border-color: var(--white);
+            background: rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
 <body data-cursor="SYSTEM ACTIVE">
@@ -1297,6 +1660,7 @@
         <ul class="nav-links">
             <li><a href="#about" class="scramble-link" data-text="ABOUT" data-cursor="GO" data-target="#about">ABOUT</a></li>
             <li><a href="#works" class="scramble-link" data-text="WORKS" data-cursor="GO" data-target=".works-horizontal-section">WORKS</a></li>
+            <li><a href="#tech-stack" class="scramble-link" data-text="STACK" data-cursor="GO" data-target="#tech-stack">STACK</a></li>
             <li><a href="#contact" class="scramble-link" data-text="CONTACT" data-cursor="GO" data-target="#contact">CONTACT</a></li>
         </ul>
     </nav>
@@ -1339,7 +1703,7 @@
         <div class="works-wrapper">
             
             <!-- Project 1 -->
-            <div class="work-card" data-cursor="VIEW">
+            <div class="work-card" data-project-id="gesture-gaming" data-cursor="CASE STUDY">
                 <span class="hud-num">01</span>
                 <div class="work-visual-container">
                     <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070" loading="lazy" alt="Gesture Gaming">
@@ -1356,7 +1720,7 @@
             </div>
 
             <!-- Project 2 -->
-            <div class="work-card" data-cursor="VIEW">
+            <div class="work-card" data-project-id="threat-intel" data-cursor="CASE STUDY">
                 <span class="hud-num">02</span>
                 <div class="work-visual-container">
                     <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=2070" loading="lazy" alt="Agri-Trade System">
@@ -1373,7 +1737,7 @@
             </div>
 
             <!-- Project 3 -->
-            <div class="work-card" data-cursor="VIEW">
+            <div class="work-card" data-project-id="neural-cipher" data-cursor="CASE STUDY">
                 <span class="hud-num">03</span>
                 <div class="work-visual-container">
                     <img src="https://images.unsplash.com/photo-1639322537228-f710d846310a?q=80&w=2070" loading="lazy" alt="Neural Network Explorer">
@@ -1481,6 +1845,130 @@
         </div>
     </section>
 
+    <!-- TECH STACK MATRIX -->
+    <section id="tech-stack" class="section-padding tech-stack-section">
+        <div class="tech-stack-header">
+            <span class="section-tag reveal">( Core Capabilities )</span>
+            <h2 class="tech-stack-title reveal scroll-scramble">TECHNICAL_STACK_MATRIX</h2>
+            
+            <div class="tech-filter-tabs reveal">
+                <button class="tech-filter-btn active" data-filter="all">ALL</button>
+                <button class="tech-filter-btn" data-filter="ai">AI & VISION</button>
+                <button class="tech-filter-btn" data-filter="hardware">HARDWARE & IOT</button>
+                <button class="tech-filter-btn" data-filter="web">WEB & FULL-STACK</button>
+                <button class="tech-filter-btn" data-filter="cyber">CYBER & SYSTEMS</button>
+                <button class="tech-filter-btn" data-filter="tools">TOOLS & DEVOPS</button>
+            </div>
+        </div>
+
+        <div class="tech-matrix-grid reveal" id="tech-matrix-grid">
+            <!-- Skill Cards -->
+            <div class="skill-card" data-category="ai" data-project-ref="gesture-gaming">
+                <div class="skill-card-top">
+                    <span class="skill-category-tag">// AI & VISION</span>
+                    <span class="skill-badge">ADVANCED</span>
+                </div>
+                <h3 class="skill-name">MediaPipe & OpenCV</h3>
+                <p class="skill-desc">Real-time 21-point hand landmark estimation, spatial gesture recognition, and computer vision pipelines.</p>
+                <div class="skill-meta">
+                    <span>APPLIED IN:</span>
+                    <span class="skill-proj-link" data-project-id="gesture-gaming">Gesture Gaming ➔</span>
+                </div>
+            </div>
+
+            <div class="skill-card" data-category="hardware" data-project-ref="gesture-gaming">
+                <div class="skill-card-top">
+                    <span class="skill-category-tag">// HARDWARE & IOT</span>
+                    <span class="skill-badge">EMBEDDED</span>
+                </div>
+                <h3 class="skill-name">ESP32 & Sensors</h3>
+                <p class="skill-desc">Microcontroller firmware, ultrasonic sensor arrays, serial bus communication, and IoT hardware integration.</p>
+                <div class="skill-meta">
+                    <span>APPLIED IN:</span>
+                    <span class="skill-proj-link" data-project-id="gesture-gaming">Gesture Gaming ➔</span>
+                </div>
+            </div>
+
+            <div class="skill-card" data-category="ai" data-project-ref="threat-intel">
+                <div class="skill-card-top">
+                    <span class="skill-category-tag">// AI & CYBER</span>
+                    <span class="skill-badge">MACHINE LEARNING</span>
+                </div>
+                <h3 class="skill-name">ML Anomaly Detection</h3>
+                <p class="skill-desc">Supervised & unsupervised pattern recognition algorithms for detecting abnormal threat telemetry and intrusion vectors.</p>
+                <div class="skill-meta">
+                    <span>APPLIED IN:</span>
+                    <span class="skill-proj-link" data-project-id="threat-intel">Threat Intel ➔</span>
+                </div>
+            </div>
+
+            <div class="skill-card" data-category="cyber" data-project-ref="threat-intel">
+                <div class="skill-card-top">
+                    <span class="skill-category-tag">// CYBER & OSINT</span>
+                    <span class="skill-badge">SECURITY</span>
+                </div>
+                <h3 class="skill-name">Automated Recon & OSINT</h3>
+                <p class="skill-desc">Threat intelligence gathering, network scanning automation, footprinting, and open-source intelligence analysis.</p>
+                <div class="skill-meta">
+                    <span>APPLIED IN:</span>
+                    <span class="skill-proj-link" data-project-id="threat-intel">Threat Intel ➔</span>
+                </div>
+            </div>
+
+            <div class="skill-card" data-category="cyber" data-project-ref="neural-cipher">
+                <div class="skill-card-top">
+                    <span class="skill-category-tag">// CRYPTO & AI</span>
+                    <span class="skill-badge">RESEARCH</span>
+                </div>
+                <h3 class="skill-name">Adversarial AI & Cryptography</h3>
+                <p class="skill-desc">Neural cipher evaluation, neural network robustness testing against adversarial perturbations, and cryptographic primitives.</p>
+                <div class="skill-meta">
+                    <span>APPLIED IN:</span>
+                    <span class="skill-proj-link" data-project-id="neural-cipher">Neural Cipher ➔</span>
+                </div>
+            </div>
+
+            <div class="skill-card" data-category="web">
+                <div class="skill-card-top">
+                    <span class="skill-category-tag">// WEB & FULL-STACK</span>
+                    <span class="skill-badge">PRIMARY</span>
+                </div>
+                <h3 class="skill-name">JavaScript & Modern Web</h3>
+                <p class="skill-desc">ES6+ async workflows, WebGL / Three.js 3D rendering, GSAP motion design, canvas animations, and responsive DOM APIs.</p>
+                <div class="skill-meta">
+                    <span>APPLIED IN:</span>
+                    <span class="skill-proj-link">Portfolio & Web Apps ➔</span>
+                </div>
+            </div>
+
+            <div class="skill-card" data-category="web">
+                <div class="skill-card-top">
+                    <span class="skill-category-tag">// WEB & STYLING</span>
+                    <span class="skill-badge">UI/UX</span>
+                </div>
+                <h3 class="skill-name">HTML5 & Vanilla CSS Architecture</h3>
+                <p class="skill-desc">Semantic HTML structure, custom design systems, CSS grid/flexbox layouts, glassmorphic UI, and micro-interactions.</p>
+                <div class="skill-meta">
+                    <span>APPLIED IN:</span>
+                    <span class="skill-proj-link">Design Systems ➔</span>
+                </div>
+            </div>
+
+            <div class="skill-card" data-category="tools">
+                <div class="skill-card-top">
+                    <span class="skill-category-tag">// TOOLS & DEVOPS</span>
+                    <span class="skill-badge">WORKFLOW</span>
+                </div>
+                <h3 class="skill-name">Git & Build Tooling</h3>
+                <p class="skill-desc">Version control, GitHub workflow, Vite bundler configuration, Vercel edge deployment, and cloud telemetry integration.</p>
+                <div class="skill-meta">
+                    <span>APPLIED IN:</span>
+                    <span class="skill-proj-link">Production Pipelines ➔</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- GITHUB REPOSITORIES SECTION -->
     <section id="github" class="section-padding github-section">
         <div class="github-header">
@@ -1553,13 +2041,49 @@
 
     <!-- SYSTEM TELEMETRY HUD -->
     <div id="telemetry-hud" class="system-telemetry">
-        <span class="tel-label">SYS_LOC [10.8505┬░ N, 76.2711┬░ E] KERALA</span>
+        <span class="tel-label">SYS_LOC [10.8505° N, 76.2711° E] KERALA</span>
         <!-- <span class="tel-separator">//</span>
         <span class="tel-label" id="tel-ip">IP: DETECTING...</span> -->
         <span class="tel-separator">//</span>
         <span class="tel-label" id="tel-date">YYYY-MM-DD</span>
         <span class="tel-separator">//</span>
         <span class="tel-time" id="tel-clock">00:00:00</span>
+    </div>
+
+    <!-- INTERACTIVE PROJECT CASE STUDY MODAL -->
+    <div id="project-modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-container">
+            <button class="modal-close-btn" id="modal-close">[ X CLOSE ]</button>
+            <div class="modal-header">
+                <span class="modal-tag" id="modal-tag">// EXPERIMENT_001</span>
+                <h2 class="modal-title" id="modal-title">PROJECT TITLE</h2>
+            </div>
+            <div class="modal-body">
+                <div class="modal-media">
+                    <img id="modal-img" src="" alt="Project Visual Preview">
+                </div>
+                <div>
+                    <h3 class="modal-section-title">SYSTEM OVERVIEW</h3>
+                    <p class="modal-text" id="modal-desc"></p>
+                    
+                    <h3 class="modal-section-title">KEY TECHNICAL HIGHLIGHTS</h3>
+                    <ul class="modal-highlights-list" id="modal-highlights"></ul>
+
+                    <h3 class="modal-section-title">TECH STACK DEPLOYED</h3>
+                    <div class="modal-tech-tags" id="modal-tech-tags"></div>
+
+                    <div class="modal-actions">
+                        <a id="modal-demo-btn" href="#" target="_blank" rel="noreferrer noopener" class="modal-action-btn">
+                            🚀 LAUNCH LIVE DEMO
+                        </a>
+                        <a id="modal-repo-btn" href="#" target="_blank" rel="noreferrer noopener" class="modal-action-btn secondary">
+                            📁 VIEW REPOSITORY
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- SCRIPTS -->
@@ -1615,21 +2139,22 @@
             });
         }
 
-        // 2. SMOOTH SCROLL (Lenis)
+        // 2. SMOOTH SCROLL (Lenis - Fast & Responsive)
         let lenis;
         if (window.innerWidth > 768) {
             lenis = new Lenis({
-                duration: 1.8, // Heavier feel
+                duration: 0.8, // Fast, snappy response
                 easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
                 direction: 'vertical',
                 gestureDirection: 'vertical',
                 smooth: true,
-                mouseMultiplier: 0.8, // Slower, more controlled
+                mouseMultiplier: 1.0, // Natural scroll speed
+                smoothTouch: false
             });
 
             lenis.on('scroll', ScrollTrigger.update);
             gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-            gsap.ticker.lagSmoothing(0);
+            gsap.ticker.lagSmoothing(500, 33); // Restores smooth frame skipping on load
         }
 
         if (window.innerWidth > 768) {
@@ -1642,21 +2167,20 @@
         let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
         let vX = mouseX, vY = mouseY;
 
+        // Passive mousemove listener (no heavy object allocation per pixel move)
         window.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
-            
-            // Move Axis Lines (Hardware Accelerated)
-            gsap.to(axisX, { y: mouseY, duration: 0.1 });
-            gsap.to(axisY, { x: mouseX, duration: 0.1 });
-        });
+        }, { passive: true });
 
-        // Smooth follow
+        // Smooth follow in ticker (Hardware Accelerated via transform)
         gsap.ticker.add(() => {
-            vX += (mouseX - vX) * 0.15;
-            vY += (mouseY - vY) * 0.15;
-            gsap.set(viewfinder, { x: vX, y: vY });
-            gsap.set(label, { x: vX, y: vY });
+            vX += (mouseX - vX) * 0.25;
+            vY += (mouseY - vY) * 0.25;
+            if (axisX) gsap.set(axisX, { y: mouseY });
+            if (axisY) gsap.set(axisY, { x: mouseX });
+            if (viewfinder) gsap.set(viewfinder, { x: vX, y: vY });
+            if (label) gsap.set(label, { x: vX, y: vY });
         });
 
         // Hover Logic
@@ -1723,12 +2247,12 @@
         camera.lookAt(0, 0, 0);
 
         // Renderer setup
-        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Performance optimization
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // Cap pixel ratio for speed
 
-        // Terrain Geometry (A large plane with many segments)
-        const geometry = new THREE.PlaneGeometry(100, 100, 40, 40);
+        // Terrain Geometry (A optimized 22x22 plane)
+        const geometry = new THREE.PlaneGeometry(100, 100, 22, 22);
         
         // Rotate flat so it looks like a floor
         geometry.rotateX(-Math.PI / 2);
@@ -1738,19 +2262,17 @@
         for (let i = 0; i < vertices.length; i += 3) {
             const x = vertices[i];
             const z = vertices[i + 2];
-            // Simple math formula for rolling hills/waves
             vertices[i + 1] = Math.sin(x / 5) * 2 + Math.cos(z / 4) * 2;
         }
         
-        // Must update normals for lighting (though wireframe doesn't strictly need it, good practice)
         geometry.computeVertexNormals();
 
         // Wireframe Material
         const material = new THREE.MeshBasicMaterial({ 
-            color: 0x333333, // Dark grey cyber-industrial color
+            color: 0x333333,
             wireframe: true,
             transparent: true,
-            opacity: 0.2 // Very subtle
+            opacity: 0.18
         });
 
         const terrain = new THREE.Mesh(geometry, material);
@@ -1758,28 +2280,29 @@
 
         // Animation Loop
         let clock = new THREE.Clock();
+        let frameCount = 0;
         
         function animateBackground() {
             requestAnimationFrame(animateBackground);
+            frameCount++;
             
-            const time = clock.getElapsedTime();
-
-            // Slowly animate the terrain moving towards the camera
-            const positions = terrain.geometry.attributes.position.array;
-            for (let i = 0; i < positions.length; i += 3) {
-                const x = positions[i];
-                const z = positions[i + 2];
-                // Update the Y axis (height) over time to make it ripple
-                positions[i + 1] = Math.sin(x / 5 + time * 0.5) * 2 + Math.cos(z / 4 + time * 0.3) * 2;
+            // Throttle vertex displacement math to every 2nd frame to save CPU
+            if (frameCount % 2 === 0) {
+                const time = clock.getElapsedTime();
+                const positions = terrain.geometry.attributes.position.array;
+                for (let i = 0; i < positions.length; i += 3) {
+                    const x = positions[i];
+                    const z = positions[i + 2];
+                    positions[i + 1] = Math.sin(x / 5 + time * 0.5) * 2 + Math.cos(z / 4 + time * 0.3) * 2;
+                }
+                terrain.geometry.attributes.position.needsUpdate = true;
             }
-            terrain.geometry.attributes.position.needsUpdate = true;
 
             // Subtle mouse parallax effect
-            const targetX = (mouseX / window.innerWidth - 0.5) * 4;
-            const targetY = (mouseY / window.innerHeight - 0.5) * 4;
+            const targetX = (mouseX / window.innerWidth - 0.5) * 3;
+            const targetY = (mouseY / window.innerHeight - 0.5) * 3;
             
             camera.position.x += (targetX - camera.position.x) * 0.05;
-            // Keep Y elevated but allow slight shifting
             camera.position.y += ((5 - targetY) - camera.position.y) * 0.05;
             camera.lookAt(0, 0, 0);
 
@@ -1874,7 +2397,188 @@
             initTelemetry();
             initGithubRepos();
             initGuestbook();
+            initProjectModalsAndTechStack();
         });
+
+        // 4.9 INTERACTIVE PROJECT MODAL & TECH STACK ENGINE
+        function initProjectModalsAndTechStack() {
+            const projectsData = {
+                'gesture-gaming': {
+                    tag: '// EXPERIMENT_001 // STATUS: COMPLETE',
+                    title: 'Gesture Gaming Interface',
+                    img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070',
+                    desc: 'A hybrid human-computer interaction system that turns hand gestures and physical distance into low-latency gaming inputs. Built by coupling MediaPipe vision tracking with physical ESP32 sensor arrays.',
+                    highlights: [
+                        'Real-time 21-point hand landmark estimation running at 60 FPS.',
+                        'Sub-15ms latency serial transmission between Python host and ESP32 microcontrollers.',
+                        'Dynamic spatial boundary mapping to translate 3D gestures into keyboard and gamepad signals.',
+                        'Custom calibration pipeline for varying ambient lighting and hand proportions.'
+                    ],
+                    tags: ['Python', 'MediaPipe', 'ESP32', 'OpenCV', 'Pygame', 'Serial Protocol'],
+                    demoUrl: 'https://github.com/hacker-oss-ux/Gesture-Gaming',
+                    repoUrl: 'https://github.com/hacker-oss-ux/Gesture-Gaming'
+                },
+                'threat-intel': {
+                    tag: '// EXPERIMENT_002 // STATUS: ACTIVE',
+                    title: 'Threat Intel Framework',
+                    img: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=2070',
+                    desc: 'An automated cybersecurity reconnaissance framework that continuously gathers network telemetry, performs footprinting, and utilizes ML anomaly detection to classify threat signatures.',
+                    highlights: [
+                        'Automated OSINT data aggregation from distributed security feeds.',
+                        'Unsupervised machine learning model trained to detect abnormal traffic patterns.',
+                        'Interactive telemetry HUD interface displaying real-time alert logs.',
+                        'Modular plugin system allowing seamless integration of custom scanner modules.'
+                    ],
+                    tags: ['Python', 'Machine Learning', 'Cybersecurity', 'OSINT', 'REST API', 'Linux'],
+                    demoUrl: 'https://github.com/hacker-oss-ux/Threat-Intel',
+                    repoUrl: 'https://github.com/hacker-oss-ux/Threat-Intel'
+                },
+                'neural-cipher': {
+                    tag: '// EXPERIMENT_003 // STATUS: RESEARCH',
+                    title: 'Neural Cipher Laboratory',
+                    img: 'https://images.unsplash.com/photo-1639322537228-f710d846310a?q=80&w=2070',
+                    desc: 'Research sandbox exploring AI-assisted encryption schemes and testing neural network resilience against adversarial noise perturbations and prompt injection attacks.',
+                    highlights: [
+                        'Symmetric key encryption simulation aided by neural weight transformations.',
+                        'Adversarial perturbation generation to evaluate vision and text model vulnerabilities.',
+                        'Benchmarking latency vs security trade-offs across model architectures.',
+                        'Comprehensive visual graphs plotting adversarial attack success rates.'
+                    ],
+                    tags: ['JavaScript', 'Python', 'Adversarial AI', 'Cryptography', 'PyTorch', 'Data Science'],
+                    demoUrl: 'https://github.com/hacker-oss-ux/Neural-Cipher',
+                    repoUrl: 'https://github.com/hacker-oss-ux/Neural-Cipher'
+                }
+            };
+
+            const modal = document.getElementById('project-modal');
+            const backdrop = modal ? modal.querySelector('.modal-backdrop') : null;
+            const closeBtn = document.getElementById('modal-close');
+
+            if (!modal) return;
+
+            function openModal(projectId) {
+                const data = projectsData[projectId];
+                if (!data) return;
+
+                document.getElementById('modal-tag').textContent = data.tag;
+                document.getElementById('modal-title').textContent = data.title;
+                document.getElementById('modal-img').src = data.img;
+                document.getElementById('modal-img').alt = data.title;
+                document.getElementById('modal-desc').textContent = data.desc;
+
+                const highlightsEl = document.getElementById('modal-highlights');
+                highlightsEl.innerHTML = '';
+                data.highlights.forEach(h => {
+                    const li = document.createElement('li');
+                    li.textContent = h;
+                    highlightsEl.appendChild(li);
+                });
+
+                const techEl = document.getElementById('modal-tech-tags');
+                techEl.innerHTML = '';
+                data.tags.forEach(t => {
+                    const span = document.createElement('span');
+                    span.className = 'modal-tech-tag';
+                    span.textContent = t;
+                    techEl.appendChild(span);
+                });
+
+                document.getElementById('modal-demo-btn').href = data.demoUrl;
+                document.getElementById('modal-repo-btn').href = data.repoUrl;
+
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            // Click work cards to open modal
+            document.querySelectorAll('.work-card').forEach((card, idx) => {
+                const projectIds = ['gesture-gaming', 'threat-intel', 'neural-cipher'];
+                const pid = card.getAttribute('data-project-id') || projectIds[idx];
+                card.setAttribute('data-project-id', pid);
+                
+                card.addEventListener('click', (e) => {
+                    // Avoid opening if clicking external direct links inside card
+                    if (e.target.tagName === 'A') return;
+                    openModal(pid);
+                });
+            });
+
+            // Click project links in Tech Stack Matrix to open modal
+            document.querySelectorAll('.skill-proj-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const pid = link.getAttribute('data-project-id');
+                    if (pid && projectsData[pid]) {
+                        openModal(pid);
+                    } else {
+                        // Scroll to works section
+                        const targetEl = document.querySelector('.works-horizontal-section');
+                        if (targetEl) {
+                            if (typeof lenis !== 'undefined') lenis.scrollTo(targetEl);
+                            else targetEl.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }
+                });
+            });
+
+            if (closeBtn) closeBtn.addEventListener('click', closeModal);
+            if (backdrop) backdrop.addEventListener('click', closeModal);
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+            });
+
+            // Tech Stack Matrix Filtering
+            const filterBtns = document.querySelectorAll('.tech-filter-btn');
+            const skillCards = document.querySelectorAll('.skill-card');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    const filter = btn.getAttribute('data-filter');
+
+                    skillCards.forEach(card => {
+                        const cat = card.getAttribute('data-category');
+                        if (filter === 'all' || cat === filter || (filter === 'ai' && cat.includes('ai')) || (filter === 'cyber' && cat.includes('cyber'))) {
+                            card.style.display = 'flex';
+                            if (typeof gsap !== 'undefined') {
+                                gsap.fromTo(card, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' });
+                            }
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Skill Node to Project Card Cross-Highlighting
+            skillCards.forEach(card => {
+                const pref = card.getAttribute('data-project-ref');
+                if (!pref) return;
+
+                card.addEventListener('mouseenter', () => {
+                    const targetWorkCard = document.querySelector(`.work-card[data-project-id="${pref}"]`);
+                    if (targetWorkCard) {
+                        targetWorkCard.style.borderColor = '#4fffb0';
+                        targetWorkCard.style.boxShadow = '0 0 30px rgba(79, 255, 176, 0.3)';
+                    }
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    const targetWorkCard = document.querySelector(`.work-card[data-project-id="${pref}"]`);
+                    if (targetWorkCard) {
+                        targetWorkCard.style.borderColor = '';
+                        targetWorkCard.style.boxShadow = '';
+                    }
+                });
+            });
+        }
 
         // 4.6 Live System Telemetry
         function initTelemetry() {
@@ -2457,6 +3161,38 @@
 <script defer src="/_vercel/speed-insights/script.js"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 
+    <!-- Content Protection Script -->
+    <style>
+        body {
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        img {
+            -webkit-user-drag: none;
+        }
+    </style>
+    <script>
+        // Domain Lock
+        const allowedDomains = ['localhost', '127.0.0.1', 'ajaygirish.me', 'www.ajaygirish.me'];
+        if (!allowedDomains.includes(window.location.hostname)) {
+            document.body.innerHTML = '<h1 style="color: black; text-align: center; margin-top: 20%;">This website is protected. Unauthorized hosting is prohibited.</h1>';
+        }
+
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('keydown', function(e) {
+            if(e.key === "F12" || e.keyCode === 123) { e.preventDefault(); return false; }
+            if((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "I" || e.key === "i" || e.keyCode === 73)) { e.preventDefault(); return false; }
+            if((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "J" || e.key === "j" || e.keyCode === 74)) { e.preventDefault(); return false; }
+            if((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "C" || e.key === "c" || e.keyCode === 67)) { e.preventDefault(); return false; }
+            if((e.ctrlKey || e.metaKey) && (e.key === "U" || e.key === "u" || e.keyCode === 85)) { e.preventDefault(); return false; }
+            if((e.ctrlKey || e.metaKey) && (e.key === "S" || e.key === "s" || e.keyCode === 83)) { e.preventDefault(); return false; }
+            if((e.ctrlKey || e.metaKey) && (e.key === "P" || e.key === "p" || e.keyCode === 80)) { e.preventDefault(); return false; }
+            if((e.ctrlKey || e.metaKey) && (e.key === "A" || e.key === "a" || e.keyCode === 65)) { e.preventDefault(); return false; }
+        });
+        document.addEventListener('dragstart', event => event.preventDefault());
+        document.addEventListener('drop', event => event.preventDefault());
+    </script>
 </body>
 </html>
 

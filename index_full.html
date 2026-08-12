@@ -2457,6 +2457,38 @@
 <script defer src="/_vercel/speed-insights/script.js"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 
+    <!-- Content Protection Script -->
+    <style>
+        body {
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        img {
+            -webkit-user-drag: none;
+        }
+    </style>
+    <script>
+        // Domain Lock
+        const allowedDomains = ['localhost', '127.0.0.1', 'ajaygirish.me', 'www.ajaygirish.me'];
+        if (!allowedDomains.includes(window.location.hostname)) {
+            document.body.innerHTML = '<h1 style="color: black; text-align: center; margin-top: 20%;">This website is protected. Unauthorized hosting is prohibited.</h1>';
+        }
+
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('keydown', function(e) {
+            if(e.key === "F12" || e.keyCode === 123) { e.preventDefault(); return false; }
+            if((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "I" || e.key === "i" || e.keyCode === 73)) { e.preventDefault(); return false; }
+            if((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "J" || e.key === "j" || e.keyCode === 74)) { e.preventDefault(); return false; }
+            if((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "C" || e.key === "c" || e.keyCode === 67)) { e.preventDefault(); return false; }
+            if((e.ctrlKey || e.metaKey) && (e.key === "U" || e.key === "u" || e.keyCode === 85)) { e.preventDefault(); return false; }
+            if((e.ctrlKey || e.metaKey) && (e.key === "S" || e.key === "s" || e.keyCode === 83)) { e.preventDefault(); return false; }
+            if((e.ctrlKey || e.metaKey) && (e.key === "P" || e.key === "p" || e.keyCode === 80)) { e.preventDefault(); return false; }
+            if((e.ctrlKey || e.metaKey) && (e.key === "A" || e.key === "a" || e.keyCode === 65)) { e.preventDefault(); return false; }
+        });
+        document.addEventListener('dragstart', event => event.preventDefault());
+        document.addEventListener('drop', event => event.preventDefault());
+    </script>
 </body>
 </html>
 
