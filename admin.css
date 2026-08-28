@@ -143,24 +143,25 @@ body {
     margin-bottom: 1.5rem;
 }
 
-.pin-digit {
-    width: 50px;
-    height: 60px;
+.pin-input-field {
+    width: 100%;
+    height: 56px;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--card-border);
     border-radius: 14px;
     font-family: var(--font-mono);
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     color: var(--text-primary);
     text-align: center;
+    letter-spacing: 0.3em;
     transition: all 0.2s ease;
 }
 
-.pin-digit:focus {
+.pin-input-field:focus {
     outline: none;
     border-color: var(--accent-cyan);
     background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 15px rgba(51, 204, 255, 0.2);
+    box-shadow: 0 0 20px rgba(51, 204, 255, 0.2);
 }
 
 .btn-primary {
