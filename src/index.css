@@ -1,0 +1,219 @@
+:root {
+  /* Official Lenis Smooth Scrolling Styles */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Fluid Scaling Grid reverse-engineered from ajaygirish.dev */
+  --scale: calc(100vw / 39);
+  --vg: calc(4.8 * var(--scale));
+  --display-fs: calc(2.6rem);
+  --list-fs: calc(2rem);
+  --cta-fs: calc(1.3rem);
+  --name-fs: clamp(3.8rem, 11vw, 16vw);
+
+  /* Color Palette */
+  --bg-dark: #262220;
+  --bg-dark-deep: #1f1d1b;
+  --text-light: #f3eee8;
+  --text-light-muted: #8a8178;
+  --border-dark: #5a524d;
+  --border-dark-subtle: #3a3632;
+
+  --bg-light: #faf9f6;
+  --bg-travertine: #edeae6;
+  --text-dark: #2e2b28;
+  --text-dark-muted: #6e6761;
+  --border-light: #b8b3ac;
+  --border-light-subtle: #d8d1c8;
+
+  --accent-terracotta: #8a8178;
+  --accent-cobalt: #38bdf8;
+  --accent-emerald: #34d399;
+
+  /* Typography */
+  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Easings */
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-curtain: cubic-bezier(0.3, 0.86, 0.36, 0.95);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --scale: calc(100vw / 144);
+    --display-fs: calc(3.2 * var(--scale));
+    --list-fs: calc(5.4 * var(--scale));
+    --cta-fs: calc(2.2 * var(--scale));
+    --name-fs: calc(15.5 * var(--scale));
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scrollbar-gutter: stable;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  font-size: 16px;
+  overflow-x: hidden;
+  margin: 0;
+}
+
+::selection {
+  background: #8a8178;
+  color: #faf9f6;
+}
+
+/* Typography Utility Classes */
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Chapter Heading */
+.chapter-tag {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .chapter-tag {
+    font-size: 1.5rem;
+  }
+}
+
+/* Ajay Girish Animated Link Underlines */
+.to-link-underline,
+.from-link-underline {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  padding-bottom: 2px;
+  cursor: pointer;
+}
+
+.to-link-underline::after,
+.from-link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.45s var(--ease-editorial);
+}
+
+.to-link-underline:hover::after,
+.from-link-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Ajay Girish Work Item Arrow (translates and scales on focus/hover) */
+.work-item-arrow {
+  display: inline-block;
+  transform: translate(calc(-1 * var(--scale)), calc(1 * var(--scale))) scale(0.65);
+  transform-origin: left bottom;
+  opacity: 0.25;
+  transition: transform 0.45s var(--ease-editorial), opacity 0.3s ease-out;
+  will-change: transform, opacity;
+}
+
+.work-item:hover .work-item-arrow,
+.work-item:focus-within .work-item-arrow {
+  transform: translate(0, 0) scale(1) !important;
+  opacity: 1 !important;
+}
+
+/* Curtain Reveal via Clip-Path */
+.curtain-reveal {
+  clip-path: inset(0 0 0 100%);
+  transition: clip-path 0.5s var(--ease-curtain);
+  will-change: clip-path;
+}
+
+.work-item:hover .curtain-reveal,
+.group:hover .curtain-reveal {
+  clip-path: inset(0 0 0 0) !important;
+}
+
+/* Tab button for Arsenal and Ledger */
+.editorial-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  background: transparent;
+  border: 1px solid currentColor;
+  opacity: 0.6;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.editorial-tab:hover {
+  opacity: 1;
+}
+
+.editorial-tab.active {
+  opacity: 1;
+  background: currentColor;
+}
+
+.editorial-tab.active span {
+  filter: invert(1);
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  /* Offset main content for desktop left rail header (64px / 4rem) */
+  .desktop-rail-offset {
+    margin-left: 4rem;
+  }
+}

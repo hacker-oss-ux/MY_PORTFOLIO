@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Scaffold reference: comp-1.png</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oxygen:wght@700&display=swap">
+  <link rel="stylesheet" href="layout.css">
+  <style>html,body{margin:0}body{background:#13131f}.region{box-sizing:border-box}.region.text p{white-space:pre-wrap}</style>
+</head>
+<body>
+<!-- Reference only. Every region sits at its measured box inside a comp-aspect frame. Take the boxes (layout.css), keep your own semantic structure. -->
+<main class="comp-frame" style="max-width:1376px">
+  <div class="r-masthead region chrome" data-region="masthead"><!-- top navigation masthead bar with brand name and links --></div>
+  <div class="r-hero-headline region text" data-region="hero-headline"><!-- primary architectural headline text --><p style="font-size:var(--r-hero-headline-font);font-family:var(--r-hero-headline-family),sans-serif;font-weight:var(--r-hero-headline-weight);line-height:1.05;margin:0">hero-headline</p></div>
+  <div class="r-kerala-time region text" data-region="kerala-time"><!-- Kerala local time IST timestamp and indicator --><p style="line-height:1.05;margin:0">kerala-time</p></div>
+  <div class="r-connect-btn region control" data-region="connect-btn"><!-- direct connect CTA button: match the control's lettering and visible shape to the crop (comp-spec.mjs --crop connect-btn); a control need not have button chrome --></div>
+  <div class="r-portrait-card region chrome" data-region="portrait-card"><!-- right side monolithic card frame with coordinates and telemetry --></div>
+  <figure class="r-portrait-photo region plate" data-region="portrait-photo"><img src="../../../assets/plates/portrait-photo.png" alt="" style="width:100%;height:100%;object-fit:contain;object-position:center"></figure>
+  <div class="r-geo-coords region text" data-region="geo-coords"><!-- geographic coordinates label --><p style="line-height:1.05;margin:0">geo-coords</p></div>
+  <div class="r-status-telemetry region text" data-region="status-telemetry"><!-- cobalt telemetry status node --><p style="line-height:1.05;margin:0">status-telemetry</p></div>
+</main>
+</body>
+</html>

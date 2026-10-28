@@ -1,0 +1,34 @@
+[
+  {
+    "id": "gb_1793213484577",
+    "author": "Audit Tester",
+    "handle": "@audit_bot",
+    "message": "Mechanical audit verification entry.",
+    "timestamp": "2026-10-28T18:51:24.577Z",
+    "likes": 1
+  },
+  {
+    "id": "gb_1",
+    "author": "Elena Rostova",
+    "handle": "@elena_dev",
+    "message": "The interactive MediaPipe spatial tracking workbench is mind-blowing. Super clean architecture!",
+    "timestamp": "2026-10-27T09:48:15.785Z",
+    "likes": 12
+  },
+  {
+    "id": "gb_2",
+    "author": "Marcus Vance",
+    "handle": "@marcus_v",
+    "message": "Phenomenal portfolio aesthetic. The dark obsidian and fluid physics are next level.",
+    "timestamp": "2026-10-26T19:48:15.785Z",
+    "likes": 8
+  },
+  {
+    "id": "gb_3",
+    "author": "Karthik Menon",
+    "handle": "@kmenon_ai",
+    "message": "Great to see an engineer from Kerala pushing boundaries in real-time sensor fusion and React.",
+    "timestamp": "2026-10-25T19:48:15.785Z",
+    "likes": 15
+  }
+]

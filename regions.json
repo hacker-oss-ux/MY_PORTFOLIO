@@ -1,0 +1,59 @@
+{
+  "regions": [
+    {
+      "id": "masthead",
+      "kind": "chrome",
+      "grid": "A0:J0",
+      "note": "top navigation masthead bar with brand name and links"
+    },
+    {
+      "id": "hero-headline",
+      "kind": "text",
+      "grid": "A1:D7",
+      "container": true,
+      "note": "primary architectural headline text"
+    },
+    {
+      "id": "kerala-time",
+      "kind": "text",
+      "grid": "E1:F3",
+      "note": "Kerala local time IST timestamp and indicator"
+    },
+    {
+      "id": "connect-btn",
+      "kind": "control",
+      "grid": "E6:F8",
+      "note": "direct connect CTA button"
+    },
+    {
+      "id": "portrait-card",
+      "kind": "chrome",
+      "grid": "G1:I8",
+      "container": true,
+      "note": "right side monolithic card frame with coordinates and telemetry"
+    },
+    {
+      "id": "portrait-photo",
+      "kind": "image",
+      "pixelBox": {
+        "x": 860,
+        "y": 140,
+        "w": 340,
+        "h": 460
+      },
+      "note": "photographic portrait of Ajay Girish"
+    },
+    {
+      "id": "geo-coords",
+      "kind": "text",
+      "grid": "G8:H9",
+      "note": "geographic coordinates label"
+    },
+    {
+      "id": "status-telemetry",
+      "kind": "text",
+      "grid": "H8:I9",
+      "note": "cobalt telemetry status node"
+    }
+  ]
+}
